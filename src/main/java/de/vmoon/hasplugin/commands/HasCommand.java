@@ -131,8 +131,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                                 selectedPlayer = selectRandomPlayer();
                             }
                             startgame();
-                            Bukkit.getWorld("world").setPVP(true);
-                            Bukkit.getConsoleSender().sendMessage("§6[DEBUG] PVP wurde auf true gesetzt!");
+                            enablepvp();
                         } catch (NumberFormatException e) {
                             sender.sendMessage("Bitte gib eine gültige Zahl ein oder verwende 'stop' zum Stoppen des Timers.");
                         }
@@ -310,7 +309,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
             player.setGameMode(GameMode.ADVENTURE);
             teleportManager.teleportAllPlayers();
             player.getInventory().clear();
-            Bukkit.getWorld("world").setPVP(true);
+            enablepvp();
             noNameTagTeam.addEntry(player.getName());
         }
         startTimer();
@@ -319,7 +318,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
         for (Player player: Bukkit.getOnlinePlayers()) {
             player.setGameMode(GameMode.ADVENTURE);
             player.getInventory().clear();
-            Bukkit.getWorld("world").setPVP(false);
+            disablepvp();
         }
         Bukkit.broadcastMessage("§cDas Spiel wurde abgebrochen!");
     }
@@ -335,7 +334,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
 
         if (countAlivePlayers == 0) {
             Bukkit.broadcastMessage("§cDer Sucher §f(" + selectedPlayer.getName() + ")§c hat alle Spieler getötet!");
-            Bukkit.getWorld("world").setPVP(false);
+            disablepvp();
             Bukkit.getScheduler().runTaskLater(HASPlugin.getPlugin(), () -> {
                 teleportAllPlayers();
                 for (Player player : Bukkit.getOnlinePlayers()) {
@@ -365,6 +364,14 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
     }
     private boolean moreThanOnePlayerOnline() {
         return Bukkit.getOnlinePlayers().size() > 1;
+    }
+    private void disablepvp() {
+        Bukkit.getWorld("world").setPVP(false);
+        Bukkit.getConsoleSender().sendMessage("§6[DEBUG] PVP wurde deaktiviert!");
+    }
+    private void enablepvp() {
+        Bukkit.getWorld("world").setPVP(true);
+        Bukkit.getConsoleSender().sendMessage("§6[DEBUG] PVP wurde aktiviert!");
     }
 
 }
