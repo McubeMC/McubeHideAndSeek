@@ -18,6 +18,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
+import org.bukkit.scoreboard.Team;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,10 +34,12 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
     private boolean timerRunning = false;
     private Player selectedPlayer = null;
     private TeleportManager teleportManager;
+    private Team noNameTagTeam;
 
     public HasCommand() {
         this.teleportManager = new TeleportManager();
         Bukkit.getPluginManager().registerEvents(this, HASPlugin.getPlugin());
+        setupNoNameTagTeam();
     }
 
     @Override
@@ -191,9 +196,6 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                         Bukkit.broadcastMessage("§aNoch " + time + (time == 1 ? " Sekunde" : " Sekunden") + " übrig!");
                         break;
                     case 0:
-                        Bukkit.broadcastMessage("§aDie Zeit ist Abgelaufen!");
-                        giveDiamondSword(selectedPlayer);
-                        removeBlindnessEffect();
                         break;
                 }
 
@@ -203,6 +205,8 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                 if (time == 0) {
                     Bukkit.broadcastMessage("§aDie Zeit ist abgelaufen. Der Sucher sucht jetzt");
                     time = defaultTime;
+                    giveDiamondSword(selectedPlayer);
+                    removeBlindnessEffect();
                     stopTimer();
                     return;
                 }
@@ -282,8 +286,9 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
             player.getInventory().clear();
             Bukkit.getWorld("world").setPVP(true);
             Bukkit.getConsoleSender().sendMessage("§6[DEBUG] PVP wurde auf true gesetzt! (startgame)");
-            startTimer();
+            noNameTagTeam.addEntry(player.getName());
         }
+        startTimer();
         Bukkit.getConsoleSender().sendMessage("§6[DEBUG] startgame wurde ausgeführt!");
     }
     private void cancelgame() {
@@ -312,6 +317,20 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                     player.setGameMode(GameMode.ADVENTURE);
                 }
             }, 20L * 5);
+        }
+    }
+    private void setupNoNameTagTeam() {
+        ScoreboardManager manager = Bukkit.getScoreboardManager();
+        if (manager != null) {
+            Scoreboard board = manager.getMainScoreboard();
+            noNameTagTeam = board.getTeam("noNameTag");
+            if (noNameTagTeam == null) {
+                noNameTagTeam = board.registerNewTeam("noNameTag");
+            }
+            noNameTagTeam.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER);
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                noNameTagTeam.addEntry(player.getName());
+            }
         }
     }
 
