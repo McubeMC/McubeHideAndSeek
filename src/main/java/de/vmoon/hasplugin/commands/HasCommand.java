@@ -3,7 +3,6 @@ package de.vmoon.hasplugin.commands;
 import de.vmoon.hasplugin.HASPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
-import org.bukkit.GameRule;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -49,7 +48,8 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                 startgame();
 
                 return true;
-            } else {
+            }
+            else {
                 if (args[0].equalsIgnoreCase("stop")) {
                     if (timerRunning) {
                         stopTimer();
@@ -57,33 +57,44 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                             player.getInventory().clear();
                         }
                         Bukkit.broadcastMessage("Der Timer wurde gestoppt.");
-                    } else {
+                    }
+                    else {
                         sender.sendMessage("Es läuft kein Timer.");
                     }
                     return true;
-                } else if (args[0].equalsIgnoreCase("select")) {
+                }
+                else if (args[0].equalsIgnoreCase("select")) {
                     if (args.length == 2) {
                         if (args[1].equalsIgnoreCase("random")) {
                             selectedPlayer = selectRandomPlayer();
                             sender.sendMessage("Ein neuer zufälliger Spieler wurde ausgewählt!");
-                        } else {
+                        }
+                        else {
                             Player newSelectedPlayer = Bukkit.getPlayer(args[1]);
                             if (newSelectedPlayer != null && newSelectedPlayer.isOnline()) {
                                 selectedPlayer = newSelectedPlayer;
                                 sender.sendMessage(selectedPlayer.getName() + " wurde als der gesuchte Spieler ausgewählt!");
-                            } else {
+                            }
+                            else {
                                 sender.sendMessage("Der angegebene Spieler ist nicht online.");
                             }
                         }
-                    } else {
+                    }
+                    else {
                         sender.sendMessage("Verwendung: /has select <Spieler|random>");
                     }
                     return true;
-                } else if (args[0].equalsIgnoreCase("teleportall")) {
+                }
+                else if (args[0].equalsIgnoreCase("teleportall")) {
                     teleportAllPlayers();
                     sender.sendMessage("Alle Spieler wurden zu den gespeicherten Koordinaten teleportiert.");
                     return true;
-                } else {
+                }
+                else if (args[0].equalsIgnoreCase("cancel")) {
+                    cancelgame();
+                    return true;
+                }
+                else {
                     try {
                         time = Integer.parseInt(args[0]);
                         Bukkit.broadcastMessage("Die Zeit wurde auf " + time + " Sekunden gesetzt.");
@@ -108,11 +119,13 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
             List<String> completions = new ArrayList<>();
             completions.add("stop");
             completions.add("select");
+            completions.add("cancel");
             completions.add("teleportall");
             return completions.stream()
                     .filter(s -> s.startsWith(args[0]))
                     .collect(Collectors.toList());
-        } else if (args.length == 2 && args[0].equalsIgnoreCase("select")) {
+        }
+        else if (args.length == 2 && args[0].equalsIgnoreCase("select")) {
             List<String> completions = new ArrayList<>();
             completions.addAll(Bukkit.getOnlinePlayers().stream().map(Player::getName).collect(Collectors.toList()));
             completions.add("random");
