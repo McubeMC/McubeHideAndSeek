@@ -1,5 +1,5 @@
 name: HASPlugin
-version: 2.3.0
+version: 2.3.1
 # '1.0-SNAPSHOT'
 main: de.vmoon.hasplugin.HASPlugin
 api-version: '1.20'
@@ -31,3 +31,25 @@ commands:
       has.reload:
         description: Lädt die Config Datei neu.
         permission: has.reload
+permissions:
+  has.run:
+    description: The main Hide-and-Seek Command
+    default: true
+  has.cancel:
+    description: Bricht ein laufendes Spiel ab.
+    default: op
+  has.stop:
+    description: Bricht den laufenden Timer ab.
+    default: op
+  has.select:
+    description: Wählt einen Spieler als Sucher aus.
+    default: op
+  has.select.random:
+    description: Wählt einen zufälligen Spieler aus.
+    default: op
+  has.teleportall:
+    description: Teleportiert alle Spieler zu den Koordinaten in der Config.
+    default: op
+  has.reload:
+    description: Lädt die Config Datei neu.
+    default: op
