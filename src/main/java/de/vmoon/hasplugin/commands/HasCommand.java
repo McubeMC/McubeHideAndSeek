@@ -86,7 +86,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                         }
                     }
                     else {
-                        sender.sendMessage("Verwendung: /has select <Spieler|random>");
+                        sender.sendMessage("Verwendung: /has select <Spieler | random>");
                     }
                     return true;
                 }
@@ -98,6 +98,9 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                 else if (args[0].equalsIgnoreCase("cancel")) {
                     cancelgame();
                     return true;
+                }
+                else if (args[0].equalsIgnoreCase("reload")) {
+                    reload();
                 }
                 else {
                     try {
@@ -125,6 +128,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
             completions.add("stop");
             completions.add("select");
             completions.add("cancel");
+            completions.add("reload");
             completions.add("teleportall");
             return completions.stream()
                     .filter(s -> s.startsWith(args[0]))
@@ -245,7 +249,6 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
         for (Player player : Bukkit.getOnlinePlayers()) {
             player.setLevel(0);
         }
-        Bukkit.getConsoleSender().sendMessage("§6[DEBUG] stopTimer wurde ausgeführt!");
     }
 
     private Player selectRandomPlayer() {
@@ -265,7 +268,6 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
             diamondSword.setItemMeta(meta);
             player.getInventory().addItem(diamondSword);
         }
-        Bukkit.getConsoleSender().sendMessage("§6[DEBUG] Diamantschwert wurde gegeben!");
     }
 
     private void removeBlindnessEffect() {
@@ -276,7 +278,6 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
 
     private void teleportAllPlayers() {
         teleportManager.teleportAllPlayers();
-        Bukkit.getConsoleSender().sendMessage("§6[DEBUG] TeleportAllPlayers wurde ausgeführt");
     }
 
     private void startgame() {
@@ -285,11 +286,9 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
             teleportManager.teleportAllPlayers();
             player.getInventory().clear();
             Bukkit.getWorld("world").setPVP(true);
-            Bukkit.getConsoleSender().sendMessage("§6[DEBUG] PVP wurde auf true gesetzt! (startgame)");
             noNameTagTeam.addEntry(player.getName());
         }
         startTimer();
-        Bukkit.getConsoleSender().sendMessage("§6[DEBUG] startgame wurde ausgeführt!");
     }
     private void cancelgame() {
         for (Player player: Bukkit.getOnlinePlayers()) {
@@ -311,6 +310,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
 
         if (countAlivePlayers == 0) {
             Bukkit.broadcastMessage("§cDer Sucher §f(" + selectedPlayer.getName() + ")§c hat alle Spieler getötet!");
+            Bukkit.getWorld("world").setPVP(false);
             Bukkit.getScheduler().runTaskLater(HASPlugin.getPlugin(), () -> {
                 teleportAllPlayers();
                 for (Player player : Bukkit.getOnlinePlayers()) {
@@ -332,6 +332,10 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                 noNameTagTeam.addEntry(player.getName());
             }
         }
+    }
+
+    private void reload() {
+        teleportManager.reloadConfig();
     }
 
 }

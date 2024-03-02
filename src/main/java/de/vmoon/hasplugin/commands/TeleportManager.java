@@ -13,10 +13,14 @@ import java.io.IOException;
 public class TeleportManager {
 
     private final File configFile;
-    private final FileConfiguration config;
+    private FileConfiguration config;
 
     public TeleportManager() {
         this.configFile = new File("plugins/HASPlugin/config.yml");
+        reloadConfig();
+    }
+
+    public void reloadConfig() {
         this.config = YamlConfiguration.loadConfiguration(configFile);
         // Standardwerte setzen, falls die Datei noch nicht existiert
         config.addDefault("teleportLocation.world", "world");
