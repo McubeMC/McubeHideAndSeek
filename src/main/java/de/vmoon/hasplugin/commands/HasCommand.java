@@ -53,6 +53,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                 startgame();
                 if (!sender.hasPermission("has.run")) {
                     sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
+                    return true;
                 }
 
                 return true;
@@ -61,6 +62,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                 if (args[0].equalsIgnoreCase("stop")) {
                     if (!sender.hasPermission("has.stop")) {
                         sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
+                        return true;
                     }
                     if (timerRunning) {
                         stopTimer();
@@ -77,10 +79,12 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                 else if (args[0].equalsIgnoreCase("select")) {
                     if (!sender.hasPermission("has.select")) {
                         sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
+                        return true;
                     }
                     if (args.length == 2) {
                         if (!sender.hasPermission("has.select.random")) {
                             sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
+                            return true;
                         }
                         if (args[1].equalsIgnoreCase("random")) {
                             selectedPlayer = selectRandomPlayer();
@@ -105,6 +109,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                 else if (args[0].equalsIgnoreCase("teleportall")) {
                     if (!sender.hasPermission("has.teleportall")) {
                         sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
+                        return true;
                     }
                     teleportAllPlayers();
                     sender.sendMessage("Alle Spieler wurden zu den gespeicherten Koordinaten teleportiert.");
@@ -113,6 +118,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                 else if (args[0].equalsIgnoreCase("cancel")) {
                     if (!sender.hasPermission("has.cancel")) {
                         sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
+                        return true;
                     }
                     cancelgame();
                     return true;
@@ -120,6 +126,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                 else if (args[0].equalsIgnoreCase("reload")) {
                     if (!sender.hasPermission("has.reload")) {
                         sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
+                        return true;
                     }
                     sender.sendMessage("§6Config erfolgreich neu geladen!");
                     reload();
