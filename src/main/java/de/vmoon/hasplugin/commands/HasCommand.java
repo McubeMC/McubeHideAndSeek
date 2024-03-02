@@ -100,6 +100,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                     return true;
                 }
                 else if (args[0].equalsIgnoreCase("reload")) {
+                    sender.sendMessage("§6Config erfolgreich neu geladen!");
                     reload();
                 }
                 else {
@@ -295,8 +296,8 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
             player.setGameMode(GameMode.ADVENTURE);
             player.getInventory().clear();
             Bukkit.getWorld("world").setPVP(false);
-            Bukkit.broadcastMessage("§cDas Spiel wurde abgebrochen!");
         }
+        Bukkit.broadcastMessage("§cDas Spiel wurde abgebrochen!");
     }
     private void checkIfSelectedPlayerKilledEveryone() {
         if (selectedPlayer == null || !selectedPlayer.isOnline()) {
@@ -315,6 +316,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                 teleportAllPlayers();
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     player.setGameMode(GameMode.ADVENTURE);
+                    player.getInventory().clear();
                 }
             }, 20L * 5);
         }
