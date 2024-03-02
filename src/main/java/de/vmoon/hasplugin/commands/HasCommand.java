@@ -92,6 +92,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                         }
                         startgame();
                         Bukkit.getWorld("world").setPVP(true);
+                        Bukkit.getConsoleSender().sendMessage("§6[DEBUG] PVP wurde auf true gesetzt!");
                     } catch (NumberFormatException e) {
                         sender.sendMessage("Bitte gib eine gültige Zahl ein oder verwende 'stop' zum Stoppen des Timers.");
                     }
@@ -223,6 +224,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
         time = defaultTime;
         removeBlindnessEffect();
         Bukkit.getWorld("world").setPVP(false);
+        Bukkit.getConsoleSender().sendMessage("§6[DEBUG] PVP wurde auf False gesetzt! (stoptimer)");
         for (Player player : Bukkit.getOnlinePlayers()) {
             player.setLevel(0);
         }
@@ -266,6 +268,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
             teleportManager.teleportAllPlayers();
             player.getInventory().clear();
             Bukkit.getWorld("world").setPVP(true);
+            Bukkit.getConsoleSender().sendMessage("§6[DEBUG] PVP wurde auf true gesetzt! (startgame)");
             startTimer();
         }
         Bukkit.getConsoleSender().sendMessage("§6[DEBUG] startgame wurde ausgeführt!");
