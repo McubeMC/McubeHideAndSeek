@@ -3,6 +3,7 @@ package de.vmoon.hasplugin.commands;
 import de.vmoon.hasplugin.HASPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.GameRule;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -219,7 +220,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
         timerRunning = false;
         time = defaultTime;
         removeBlindnessEffect();
-        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "pvp disable");
+        Bukkit.getWorld("world").setPVP(false);
         for (Player player : Bukkit.getOnlinePlayers()) {
             player.setLevel(0);
         }
@@ -262,9 +263,16 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
             player.setGameMode(GameMode.ADVENTURE);
             teleportManager.teleportAllPlayers();
             player.getInventory().clear();
-            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "pvp enable");
+            Bukkit.getWorld("world").setPVP(true);
             startTimer();
         }
         Bukkit.getConsoleSender().sendMessage("§6[DEBUG] startgame wurde ausgeführt!");
+    }
+    private void cancelgame() {
+        for (Player player: Bukkit.getOnlinePlayers()) {
+            player.setGameMode(GameMode.ADVENTURE);
+            player.getInventory().clear();
+            Bukkit.getWorld("world").setPVP(false);
+        }
     }
 }
