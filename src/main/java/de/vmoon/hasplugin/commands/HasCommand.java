@@ -59,7 +59,8 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
 
 
                     return true;
-                } else {
+                }
+                else {
                     if (args[0].equalsIgnoreCase("stop")) {
                         if (!sender.hasPermission("has.stop")) {
                             sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
@@ -71,11 +72,13 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                                 player.getInventory().clear();
                             }
                             Bukkit.broadcastMessage("Der Timer wurde gestoppt.");
-                        } else {
+                        }
+                        else {
                             sender.sendMessage("Es läuft kein Timer.");
                         }
                         return true;
-                    } else if (args[0].equalsIgnoreCase("select")) {
+                    }
+                    else if (args[0].equalsIgnoreCase("select")) {
                         if (!sender.hasPermission("has.select")) {
                             sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
                             return true;

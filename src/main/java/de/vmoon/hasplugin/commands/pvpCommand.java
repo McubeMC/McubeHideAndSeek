@@ -6,41 +6,49 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class pvpCommand implements CommandExecutor, TabCompleter {
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    public boolean onCommand(CommandSender sender, Command cmd, String s, String[] args) {
         if (cmd.getName().equalsIgnoreCase("pvp")) {
             if (!sender.hasPermission("pvp.use")) {
                 sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
                 return true;
             }
             else {
-                //Hier Code
-            }
-        }
-        else if (cmd.getName().equalsIgnoreCase("on")) {
-            if (!sender.hasPermission("pvp.on")) {
-                sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
-                return true;
-            }
-            else {
-                enablepvp();
-            }
-        }
-        else if (cmd.getName().equalsIgnoreCase("off")) {
-            if (!sender.hasPermission("pvp.off")) {
-                sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
-                return true;
-            }
-            else {
-                disablepvp();
+                if (args.length == 0) {
+                    sender.sendMessage("An oder aus?");
+                    return true;
+                }
+                else {
+                    if (args[0].equalsIgnoreCase("on")) {
+                        if (!sender.hasPermission("pvp.on")) {
+                            sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
+                            return true;
+                        }
+                        else {
+                            enablepvp();
+                        }
+                    }
+                    else if (args[0].equalsIgnoreCase("off")) {
+                        if (!sender.hasPermission("pvp.on")) {
+                            sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
+                            return true;
+                        }
+                        else {
+                            disablepvp();
+                        }
+                    }
+                }
             }
         }
         return false;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] strings) {
+        return null;
     }
 
     public void disablepvp() {
@@ -50,18 +58,5 @@ public class pvpCommand implements CommandExecutor, TabCompleter {
     public void enablepvp() {
         Bukkit.getWorld("world").setPVP(true);
         Bukkit.getConsoleSender().sendMessage("§6[DEBUG] PVP wurde aktiviert!");
-    }
-
-    @Override
-    public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
-        if (args.length == 1) {
-            List<String> completions = new ArrayList<>();
-            completions.add("on");
-            completions.add("off");
-            return completions.stream()
-                    .filter(s -> s.startsWith(args[0]))
-                    .collect(Collectors.toList());
-        }
-        return null;
     }
 }
