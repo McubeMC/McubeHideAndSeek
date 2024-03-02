@@ -1,0 +1,11 @@
+name: HASPlugin
+version: 2.1.4
+# '1.0-SNAPSHOT'
+main: de.vmoon.hasplugin.HASPlugin
+api-version: '1.20'
+authors: [VoidableMoon]
+description: A Hide and Seek Plugin by VoidableMoon884
+website: https://vmoon.de/
+commands:
+  has:
+    permission: has.run
