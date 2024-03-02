@@ -6,7 +6,9 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class pvpCommand implements CommandExecutor, TabCompleter {
     @Override
@@ -47,7 +49,15 @@ public class pvpCommand implements CommandExecutor, TabCompleter {
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] strings) {
+    public List<String> onTabComplete(CommandSender commandSender, Command command, String alias, String[] args) {
+        if (args.length == 1) {
+            List<String> completions = new ArrayList<>();
+            completions.add("on");
+            completions.add("off");
+            return completions.stream()
+                    .filter(s -> s.startsWith(args[0]))
+                    .collect(Collectors.toList());
+        }
         return null;
     }
 

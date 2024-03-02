@@ -1,5 +1,5 @@
 name: HASPlugin
-version: 2.3.8
+version: 2.3.9
 # '${project.version}'
 main: de.vmoon.hasplugin.HASPlugin
 api-version: '1.20'
