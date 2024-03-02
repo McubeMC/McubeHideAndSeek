@@ -223,8 +223,6 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
         timerRunning = false;
         time = defaultTime;
         removeBlindnessEffect();
-        Bukkit.getWorld("world").setPVP(false);
-        Bukkit.getConsoleSender().sendMessage("§6[DEBUG] PVP wurde auf False gesetzt! (stoptimer)");
         for (Player player : Bukkit.getOnlinePlayers()) {
             player.setLevel(0);
         }
