@@ -8,6 +8,7 @@ import org.bukkit.command.TabCompleter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class pvpCommand implements CommandExecutor, TabCompleter {
     @Override
@@ -18,7 +19,7 @@ public class pvpCommand implements CommandExecutor, TabCompleter {
                 return true;
             }
             else {
-                disablepvp();
+                //Hier Code
             }
         }
         else if (cmd.getName().equalsIgnoreCase("on")) {
@@ -28,6 +29,15 @@ public class pvpCommand implements CommandExecutor, TabCompleter {
             }
             else {
                 enablepvp();
+            }
+        }
+        else if (cmd.getName().equalsIgnoreCase("off")) {
+            if (!sender.hasPermission("pvp.off")) {
+                sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
+                return true;
+            }
+            else {
+                disablepvp();
             }
         }
         return false;
@@ -48,6 +58,9 @@ public class pvpCommand implements CommandExecutor, TabCompleter {
             List<String> completions = new ArrayList<>();
             completions.add("on");
             completions.add("off");
+            return completions.stream()
+                    .filter(s -> s.startsWith(args[0]))
+                    .collect(Collectors.toList());
         }
         return null;
     }
