@@ -140,6 +140,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
         player.setGameMode(GameMode.SPECTATOR);
+        checkIfSelectedPlayerKilledEveryone();
         if (timerRunning)
             if (allPlayersDead()) {
                 gameEnd();
@@ -206,6 +207,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                     return;
                 }
                 time--;
+                checkIfSelectedPlayerKilledEveryone();
                 if (allPlayersDead()) {
                     gameEnd();
                     stopTimer();
@@ -289,6 +291,22 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
             player.setGameMode(GameMode.ADVENTURE);
             player.getInventory().clear();
             Bukkit.getWorld("world").setPVP(false);
+            Bukkit.broadcastMessage("§cDas Spiel wurde abgebrochen!");
         }
     }
+    private void checkIfSelectedPlayerKilledEveryone() {
+        if (selectedPlayer == null || !selectedPlayer.isOnline()) {
+            // Der ausgewählte Spieler ist nicht gesetzt oder nicht online
+            return;
+        }
+
+        long countAlivePlayers = Bukkit.getOnlinePlayers().stream()
+                .filter(player -> !player.equals(selectedPlayer) && !player.isDead())
+                .count();
+
+        if (countAlivePlayers == 0) {
+            Bukkit.broadcastMessage("§cDer Sucher (" + selectedPlayer.getName() + ") hat alle Spieler getötet!");
+        }
+    }
+
 }
