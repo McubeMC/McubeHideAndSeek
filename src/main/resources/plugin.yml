@@ -1,5 +1,5 @@
 name: HASPlugin
-version: 2.3.4
+version: 2.3.5
 # '${project.version}'
 main: de.vmoon.hasplugin.HASPlugin
 api-version: '1.20'
@@ -31,6 +31,17 @@ commands:
       has.reload:
         description: Lädt die Config Datei neu.
         permission: has.reload
+  pvp:
+    description: Aktiviert oder deaktiviert PVP.
+    usage: /pvp [on|off]
+    permission: pvp.use
+    children:
+      pvp.on:
+        description: Aktiviert PVP.
+        permission: pvp.on
+      pvp.off:
+        description: Deaktiviert PVP.
+        permission: pvp.off
 permissions:
   has.run:
     description: The main Hide-and-Seek Command
@@ -52,4 +63,13 @@ permissions:
     default: op
   has.reload:
     description: Lädt die Config Datei neu.
+    default: op
+  pvp.use:
+    description: Aktiviert oder Deaktiviert PVP.
+    default: op
+  pvp.on:
+    description: Aktiviert PVP.
+    default: op
+  pvp.off:
+    description: Deaktiviert PVP.
     default: op
