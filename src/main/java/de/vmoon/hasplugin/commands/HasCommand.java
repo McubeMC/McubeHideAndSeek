@@ -133,12 +133,11 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         if (selectedPlayer != null && event.getPlayer().equals(selectedPlayer)) {
-            if (time > 0) {
-                // Wenn die Zeit größer als 0 ist, blockiere die Bewegung und verringere die Zeit
+            if (timerRunning) {
+                // Wenn der Timer läuft, blockiere die Bewegung des Spielers
                 event.setCancelled(true);
-                time--;
-            } else {
-                // Wenn die Zeit abgelaufen ist, erlaube die Bewegung des Spielers wieder
+            }
+            else {
                 event.setCancelled(false);
             }
         }
