@@ -1,5 +1,5 @@
 name: HASPlugin
-version: 2.2.7
+version: 2.3.0
 # '1.0-SNAPSHOT'
 main: de.vmoon.hasplugin.HASPlugin
 api-version: '1.20'
@@ -8,4 +8,26 @@ description: A Hide and Seek Plugin by VoidableMoon884
 website: https://vmoon.de/
 commands:
   has:
+    description: The main Hide-and-Seek Command
+    usage: /has [stop|cancel|select|teleportall]
     permission: has.run
+    children:
+      has.cancel:
+        description: Bricht ein laufendes Spiel ab.
+        permission: has.cancel
+      has.stop:
+        description: Bricht den laufenden Timer ab.
+        permission: has.stop
+      has.select:
+        description: Wählt einen Spieler als Sucher aus.
+        permission: has.select
+        children:
+          has.select.random:
+            description: Wählt einen zufälligen Spieler aus.
+            permission: has.select.random
+      has.teleportall:
+        description: Teleportiert alle Spieler zu den Koordinaten in der Config.
+        permission: has.teleportall
+      has.reload:
+        description: Lädt die Config Datei neu.
+        permission: has.reload
