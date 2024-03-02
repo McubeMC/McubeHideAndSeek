@@ -47,6 +47,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                     selectedPlayer = selectRandomPlayer();
                 }
                 startgame();
+
                 return true;
             } else {
                 if (args[0].equalsIgnoreCase("stop")) {
@@ -90,6 +91,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                             selectedPlayer = selectRandomPlayer();
                         }
                         startgame();
+                        Bukkit.getWorld("world").setPVP(true);
                     } catch (NumberFormatException e) {
                         sender.sendMessage("Bitte gib eine gültige Zahl ein oder verwende 'stop' zum Stoppen des Timers.");
                     }
