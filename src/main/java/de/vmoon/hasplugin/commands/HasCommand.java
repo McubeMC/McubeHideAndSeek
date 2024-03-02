@@ -45,106 +45,102 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (cmd.getName().equalsIgnoreCase("has")) {
-            if (args.length == 0) {
-                time = defaultTime;
-                if (selectedPlayer == null || !selectedPlayer.isOnline()) {
-                    selectedPlayer = selectRandomPlayer();
-                }
-                startgame();
-                if (!sender.hasPermission("has.run")) {
-                    sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
-                    return true;
-                }
-
+            if (!sender.hasPermission("has.run")) {
+                sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
                 return true;
             }
-            else {
-                if (args[0].equalsIgnoreCase("stop")) {
-                    if (!sender.hasPermission("has.stop")) {
-                        sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
-                        return true;
+            if (moreThanOnePlayerOnline()) {
+                if (args.length == 0) {
+                    time = defaultTime;
+                    if (selectedPlayer == null || !selectedPlayer.isOnline()) {
+                        selectedPlayer = selectRandomPlayer();
                     }
-                    if (timerRunning) {
-                        stopTimer();
-                        for (Player player : Bukkit.getOnlinePlayers()) {
-                            player.getInventory().clear();
-                        }
-                        Bukkit.broadcastMessage("Der Timer wurde gestoppt.");
-                    }
-                    else {
-                        sender.sendMessage("Es läuft kein Timer.");
-                    }
+                    startgame();
+
+
                     return true;
-                }
-                else if (args[0].equalsIgnoreCase("select")) {
-                    if (!sender.hasPermission("has.select")) {
-                        sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
-                        return true;
-                    }
-                    if (args.length == 2) {
-                        if (!sender.hasPermission("has.select.random")) {
+                } else {
+                    if (args[0].equalsIgnoreCase("stop")) {
+                        if (!sender.hasPermission("has.stop")) {
                             sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
                             return true;
                         }
-                        if (args[1].equalsIgnoreCase("random")) {
-                            selectedPlayer = selectRandomPlayer();
-                            sender.sendMessage("Ein neuer zufälliger Spieler wurde ausgewählt!");
-                        }
-                        else {
-                            Player newSelectedPlayer = Bukkit.getPlayer(args[1]);
-                            if (newSelectedPlayer != null && newSelectedPlayer.isOnline()) {
-                                selectedPlayer = newSelectedPlayer;
-                                sender.sendMessage(selectedPlayer.getName() + " wurde als der gesuchte Spieler ausgewählt!");
+                        if (timerRunning) {
+                            stopTimer();
+                            for (Player player : Bukkit.getOnlinePlayers()) {
+                                player.getInventory().clear();
                             }
-                            else {
-                                sender.sendMessage("Der angegebene Spieler ist nicht online.");
+                            Bukkit.broadcastMessage("Der Timer wurde gestoppt.");
+                        } else {
+                            sender.sendMessage("Es läuft kein Timer.");
+                        }
+                        return true;
+                    } else if (args[0].equalsIgnoreCase("select")) {
+                        if (!sender.hasPermission("has.select")) {
+                            sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
+                            return true;
+                        }
+                        if (args.length == 2) {
+                            if (!sender.hasPermission("has.select.random")) {
+                                sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
+                                return true;
                             }
+                            if (args[1].equalsIgnoreCase("random")) {
+                                selectedPlayer = selectRandomPlayer();
+                                sender.sendMessage("Ein neuer zufälliger Spieler wurde ausgewählt!");
+                            } else {
+                                Player newSelectedPlayer = Bukkit.getPlayer(args[1]);
+                                if (newSelectedPlayer != null && newSelectedPlayer.isOnline()) {
+                                    selectedPlayer = newSelectedPlayer;
+                                    sender.sendMessage(selectedPlayer.getName() + " wurde als der gesuchte Spieler ausgewählt!");
+                                } else {
+                                    sender.sendMessage("Der angegebene Spieler ist nicht online.");
+                                }
+                            }
+                        } else {
+                            sender.sendMessage("Verwendung: /has select <Spieler | random>");
+                        }
+                        return true;
+                    } else if (args[0].equalsIgnoreCase("teleportall")) {
+                        if (!sender.hasPermission("has.teleportall")) {
+                            sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
+                            return true;
+                        }
+                        teleportAllPlayers();
+                        sender.sendMessage("Alle Spieler wurden zu den gespeicherten Koordinaten teleportiert.");
+                        return true;
+                    } else if (args[0].equalsIgnoreCase("cancel")) {
+                        if (!sender.hasPermission("has.cancel")) {
+                            sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
+                            return true;
+                        }
+                        cancelgame();
+                        return true;
+                    } else if (args[0].equalsIgnoreCase("reload")) {
+                        if (!sender.hasPermission("has.reload")) {
+                            sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
+                            return true;
+                        }
+                        sender.sendMessage("§6Config erfolgreich neu geladen!");
+                        reload();
+                    } else {
+                        try {
+                            time = Integer.parseInt(args[0]);
+                            Bukkit.broadcastMessage("Die Zeit wurde auf " + time + " Sekunden gesetzt.");
+                            if (selectedPlayer == null || !selectedPlayer.isOnline()) {
+                                selectedPlayer = selectRandomPlayer();
+                            }
+                            startgame();
+                            Bukkit.getWorld("world").setPVP(true);
+                            Bukkit.getConsoleSender().sendMessage("§6[DEBUG] PVP wurde auf true gesetzt!");
+                        } catch (NumberFormatException e) {
+                            sender.sendMessage("Bitte gib eine gültige Zahl ein oder verwende 'stop' zum Stoppen des Timers.");
                         }
                     }
-                    else {
-                        sender.sendMessage("Verwendung: /has select <Spieler | random>");
-                    }
-                    return true;
                 }
-                else if (args[0].equalsIgnoreCase("teleportall")) {
-                    if (!sender.hasPermission("has.teleportall")) {
-                        sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
-                        return true;
-                    }
-                    teleportAllPlayers();
-                    sender.sendMessage("Alle Spieler wurden zu den gespeicherten Koordinaten teleportiert.");
-                    return true;
-                }
-                else if (args[0].equalsIgnoreCase("cancel")) {
-                    if (!sender.hasPermission("has.cancel")) {
-                        sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
-                        return true;
-                    }
-                    cancelgame();
-                    return true;
-                }
-                else if (args[0].equalsIgnoreCase("reload")) {
-                    if (!sender.hasPermission("has.reload")) {
-                        sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
-                        return true;
-                    }
-                    sender.sendMessage("§6Config erfolgreich neu geladen!");
-                    reload();
-                }
-                else {
-                    try {
-                        time = Integer.parseInt(args[0]);
-                        Bukkit.broadcastMessage("Die Zeit wurde auf " + time + " Sekunden gesetzt.");
-                        if (selectedPlayer == null || !selectedPlayer.isOnline()) {
-                            selectedPlayer = selectRandomPlayer();
-                        }
-                        startgame();
-                        Bukkit.getWorld("world").setPVP(true);
-                        Bukkit.getConsoleSender().sendMessage("§6[DEBUG] PVP wurde auf true gesetzt!");
-                    } catch (NumberFormatException e) {
-                        sender.sendMessage("Bitte gib eine gültige Zahl ein oder verwende 'stop' zum Stoppen des Timers.");
-                    }
-                }
+            }
+            else {
+                Bukkit.broadcastMessage("§cEs ist nur ein Spieler online. Es müssen mindestens 2 Spieler auf dem Server sein!");
             }
         }
         return false;
@@ -366,6 +362,9 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
 
     private void reload() {
         teleportManager.reloadConfig();
+    }
+    private boolean moreThanOnePlayerOnline() {
+        return Bukkit.getOnlinePlayers().size() > 1;
     }
 
 }
