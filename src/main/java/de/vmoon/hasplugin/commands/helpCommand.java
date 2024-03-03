@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 public class helpCommand implements CommandExecutor, TabCompleter, Listener {
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String alias, String[] strings) {
-        commandSender.sendMessage("§l§n§2-----Help-----§r\n/has [select|stop|cancel|{time}|reload|teleportall]\n");
         if (command.getName().equalsIgnoreCase("hashelp")) {
             if (!commandSender.hasPermission("has.help")) {
                 commandSender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
@@ -22,6 +21,7 @@ public class helpCommand implements CommandExecutor, TabCompleter, Listener {
             else {
                 if (strings.length == 0) {
                     commandSender.sendMessage("Bei welchem befehl brauchst du Hilfe?");
+                    commandSender.sendMessage("§l§n§2-----Help-----§r\n/has [select|stop|cancel|{time}|reload|teleportall]\n");
                     return true;
                 }
                 else {
@@ -80,8 +80,11 @@ public class helpCommand implements CommandExecutor, TabCompleter, Listener {
     public List<String> onTabComplete(CommandSender commandSender, Command command, String alias, String[] strings) {
         if (strings.length == 1) {
             List<String> completions = new ArrayList<>();
-            completions.add("on");
-            completions.add("off");
+            completions.add("cancel");
+            completions.add("reload");
+            completions.add("select");
+            completions.add("stop");
+            completions.add("teleportall");
             return completions.stream()
                     .filter(s -> s.startsWith(strings[0]))
                     .collect(Collectors.toList());

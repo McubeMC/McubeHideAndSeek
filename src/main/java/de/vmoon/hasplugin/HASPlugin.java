@@ -8,12 +8,14 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class HASPlugin extends JavaPlugin {
     private static HASPlugin plugin;
+    private pvpCommand pvpCommand;
 
     @Override
     public void onEnable() {
         // Plugin startup logic
         plugin = this;
         Bukkit.getConsoleSender().sendMessage("§6HASPlugin erfolgreich geladen!");
+        pvpCommand.disablepvp();
         getCommand("has").setExecutor(new HasCommand());
         getCommand("pvp").setExecutor(new pvpCommand());
         getCommand("hashelp").setExecutor(new helpCommand());
