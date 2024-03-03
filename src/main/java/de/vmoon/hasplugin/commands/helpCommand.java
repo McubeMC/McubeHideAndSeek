@@ -14,19 +14,19 @@ public class helpCommand implements CommandExecutor, TabCompleter, Listener {
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String alias, String[] strings) {
         if (command.getName().equalsIgnoreCase("hashelp")) {
-            if (!commandSender.hasPermission("has.help")) {
+            if (!commandSender.hasPermission("hashelp.use")) {
                 commandSender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
                 return true;
             }
             else {
                 if (strings.length == 0) {
-                    commandSender.sendMessage("Bei welchem befehl brauchst du Hilfe?");
                     commandSender.sendMessage("§l§n§2-----Help-----§r\n/has [select|stop|cancel|{time}|reload|teleportall]\n");
+                    commandSender.sendMessage("Bei welchem befehl brauchst du Hilfe?");
                     return true;
                 }
                 else {
                     if (strings[0].equalsIgnoreCase("cancel")) {
-                        if (!commandSender.hasPermission("has.help.cancel")) {
+                        if (!commandSender.hasPermission("hashelp.cancel")) {
                             commandSender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
                             return true;
                         }
@@ -35,7 +35,7 @@ public class helpCommand implements CommandExecutor, TabCompleter, Listener {
                         }
                     }
                     else if (strings[0].equalsIgnoreCase("reload")) {
-                        if (!commandSender.hasPermission("has.help.reload")) {
+                        if (!commandSender.hasPermission("hashelp.reload")) {
                             commandSender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
                             return true;
                         }
@@ -44,7 +44,7 @@ public class helpCommand implements CommandExecutor, TabCompleter, Listener {
                         }
                     }
                     else if (strings[0].equalsIgnoreCase("select")) {
-                        if (!commandSender.hasPermission("has.help.select")) {
+                        if (!commandSender.hasPermission("hashelp.select")) {
                             commandSender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
                             return true;
                         }
@@ -53,7 +53,7 @@ public class helpCommand implements CommandExecutor, TabCompleter, Listener {
                         }
                     }
                     else if (strings[0].equalsIgnoreCase("stop")) {
-                        if (!commandSender.hasPermission("has.help.stop")) {
+                        if (!commandSender.hasPermission("hashelp.stop")) {
                             commandSender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
                             return true;
                         }
@@ -62,12 +62,21 @@ public class helpCommand implements CommandExecutor, TabCompleter, Listener {
                         }
                     }
                     else if (strings[0].equalsIgnoreCase("teleportall")) {
-                        if (!commandSender.hasPermission("has.help.teleportall")) {
+                        if (!commandSender.hasPermission("hashelp.teleportall")) {
                             commandSender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
                             return true;
                         }
                         else {
                             commandSender.sendMessage("§l§n§2-----Help-----§r\n/has stop\nTeleportiert alle Spieler zu den in der Datei angegebenen Koordinaten.");
+                        }
+                    }
+                    else if (strings[0].equalsIgnoreCase("help")) {
+                        if (!commandSender.hasPermission("hashelp.help")) {
+                            commandSender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
+                            return true;
+                        }
+                        else {
+                            commandSender.sendMessage("§l§n§2-----Help-----§r\n/has stop\nZeigt diese Hilfe.");
                         }
                     }
                 }
@@ -85,6 +94,7 @@ public class helpCommand implements CommandExecutor, TabCompleter, Listener {
             completions.add("select");
             completions.add("stop");
             completions.add("teleportall");
+            completions.add("help");
             return completions.stream()
                     .filter(s -> s.startsWith(strings[0]))
                     .collect(Collectors.toList());

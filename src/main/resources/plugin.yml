@@ -1,5 +1,5 @@
 name: HASPlugin
-version: 2.4.3
+version: 2.4.4
 # '${project.version}'
 main: de.vmoon.hasplugin.HASPlugin
 api-version: '1.20'
@@ -31,6 +31,9 @@ commands:
       has.reload:
         description: Lädt die Config Datei neu.
         permission: has.reload
+      has.help:
+        description: Hilfe für den Befehl
+        permission: has.help
   pvp:
     description: Aktiviert oder deaktiviert PVP.
     usage: /pvp [on|off]
@@ -45,23 +48,26 @@ commands:
   hashelp:
     description: Hilfe für die befehle
     usage: /hashelp {befehl}
-    permission: has.help
+    permission: hashelp.use
     children:
-      has.help.cancel:
+      hashelp.cancel:
         description: Hilfe für /has cancel
-        permission: has.help.cancel
-      has.help.reload:
+        permission: hashelp.cancel
+      hashelp.reload:
         description: Hilfe für /has reload
-        permission: has.help.reload
-      has.help.select:
+        permission: hashelp.reload
+      hashelp.select:
         description: Hilfe für /has select
-        permission: has.help.select
-      has.help.stop:
+        permission: hashelp.select
+      hashelp.stop:
         description: Hilfe für /has stop
-        permission: has.help.stop
-      has.help.teleportall:
+        permission: hashelp.stop
+      hashelp.teleportall:
         description: Hilfe für /has teleportall
-        permission: has.help.teleportall
+        permission: hashelp.teleportall
+      hashelp.help:
+        description: Zeigt diese Hilfe.
+        permission: hashelp.help
 permissions:
   has.run:
     description: The main Hide-and-Seek Command
@@ -84,6 +90,9 @@ permissions:
   has.reload:
     description: Lädt die Config Datei neu.
     default: op
+  has.help:
+    description: Befehl für Hilfe
+    default: op
   pvp.use:
     description: Aktiviert oder Deaktiviert PVP.
     default: op
@@ -92,4 +101,25 @@ permissions:
     default: op
   pvp.off:
     description: Deaktiviert PVP.
+    default: op
+  hashelp.use:
+    description: Hilfe für /has
+    default: op
+  hashelp.cancel:
+    description: Hilfe für /has cancel
+    default: op
+  hashelp.reload:
+    description: Hilfe für /has reload
+    default: op
+  hashelp.select:
+    description: Hilfe für /has select
+    default: op
+  hashelp.stop:
+    description: Hilfe für /has stop
+    default: op
+  hashelp.teleportall:
+    description: Hilfe für /has teleportall
+    default: op
+  hashelp.help:
+    description: Zeigt dieses Hilfe.
     default: op

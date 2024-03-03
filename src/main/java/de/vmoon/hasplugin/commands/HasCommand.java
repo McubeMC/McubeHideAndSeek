@@ -100,11 +100,13 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                                     sender.sendMessage("Der angegebene Spieler ist nicht online.");
                                 }
                             }
-                        } else {
+                        }
+                        else {
                             sender.sendMessage("Verwendung: /has select <Spieler | random>");
                         }
                         return true;
-                    } else if (args[0].equalsIgnoreCase("teleportall")) {
+                    }
+                    else if (args[0].equalsIgnoreCase("teleportall")) {
                         if (!sender.hasPermission("has.teleportall")) {
                             sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
                             return true;
@@ -112,21 +114,32 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                         teleportAllPlayers();
                         sender.sendMessage("Alle Spieler wurden zu den gespeicherten Koordinaten teleportiert.");
                         return true;
-                    } else if (args[0].equalsIgnoreCase("cancel")) {
+                    }
+                    else if (args[0].equalsIgnoreCase("cancel")) {
                         if (!sender.hasPermission("has.cancel")) {
                             sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
                             return true;
                         }
                         cancelgame();
                         return true;
-                    } else if (args[0].equalsIgnoreCase("reload")) {
+                    }
+                    else if (args[0].equalsIgnoreCase("reload")) {
                         if (!sender.hasPermission("has.reload")) {
                             sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
                             return true;
                         }
                         sender.sendMessage("§6Config erfolgreich neu geladen!");
                         reload();
-                    } else {
+                    }
+                    else if (args[0].equalsIgnoreCase("help")) {
+                        if (!sender.hasPermission("has.help")) {
+                            sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
+                            return true;
+                        }
+                        sender.sendMessage("Bitte benutze /hashelp!");
+                        return true;
+                    }
+                    else {
                         try {
                             time = Integer.parseInt(args[0]);
                             Bukkit.broadcastMessage("Die Zeit wurde auf " + time + " Sekunden gesetzt.");
@@ -157,6 +170,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
             completions.add("cancel");
             completions.add("reload");
             completions.add("teleportall");
+            completions.add("help");
             return completions.stream()
                     .filter(s -> s.startsWith(args[0]))
                     .collect(Collectors.toList());
