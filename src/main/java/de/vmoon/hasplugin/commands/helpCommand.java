@@ -67,7 +67,7 @@ public class helpCommand implements CommandExecutor, TabCompleter, Listener {
                             return true;
                         }
                         else {
-                            commandSender.sendMessage("§l§n§2-----Help-----§r\n/has stop\nTeleportiert alle Spieler zu den in der Datei angegebenen Koordinaten.");
+                            commandSender.sendMessage("§l§n§2-----Help-----§r\n/has teleportall\nTeleportiert alle Spieler zu den in der Datei angegebenen Koordinaten.");
                         }
                     }
                     else if (strings[0].equalsIgnoreCase("help")) {
@@ -76,7 +76,7 @@ public class helpCommand implements CommandExecutor, TabCompleter, Listener {
                             return true;
                         }
                         else {
-                            commandSender.sendMessage("§l§n§2-----Help-----§r\n/has stop\nZeigt diese Hilfe.");
+                            commandSender.sendMessage("§l§n§2-----Help-----§r\n/has help\nZeigt diese Hilfe.");
                         }
                     }
                 }
