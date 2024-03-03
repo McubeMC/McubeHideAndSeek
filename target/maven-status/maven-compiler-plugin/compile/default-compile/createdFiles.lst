@@ -1,5 +1,6 @@
 de\vmoon\hasplugin\commands\HasCommand$1.class
 de\vmoon\hasplugin\commands\HasCommand.class
+de\vmoon\hasplugin\commands\helpCommand.class
 de\vmoon\hasplugin\commands\pvpCommand.class
 de\vmoon\hasplugin\commands\TeleportManager.class
 de\vmoon\hasplugin\HASPlugin.class

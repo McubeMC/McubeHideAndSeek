@@ -1,5 +1,5 @@
 name: HASPlugin
-version: 2.3.9
+version: 2.4.0
 # '1.0-SNAPSHOT'
 main: de.vmoon.hasplugin.HASPlugin
 api-version: '1.20'
@@ -42,6 +42,26 @@ commands:
       pvp.off:
         description: Deaktiviert PVP.
         permission: pvp.off
+  hashelp:
+    description: Hilfe für die befehle
+    usage: /hashelp {befehl}
+    permission: has.help
+    children:
+      has.help.cancel:
+        description: Hilfe für /has cancel
+        permission: has.help.cancel
+      has.help.reload:
+        description: Hilfe für /has reload
+        permission: has.help.reload
+      has.help.select:
+        description: Hilfe für /has select
+        permission: has.help.select
+      has.help.stop:
+        description: Hilfe für /has stop
+        permission: has.help.stop
+      has.help.teleportall:
+        description: Hilfe für /has teleportall
+        permission: has.help.teleportall
 permissions:
   has.run:
     description: The main Hide-and-Seek Command
