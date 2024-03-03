@@ -139,6 +139,15 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                         sender.sendMessage("Bitte benutze /hashelp!");
                         return true;
                     }
+                    else if (args[0].equalsIgnoreCase("skip")) {
+                        if (!sender.hasPermission("has.skip")) {
+                            sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
+                            return true;
+                        }
+                        teleportAllPlayers();
+                        sender.sendMessage("SKIPPED");
+                        return true;
+                    }
                     else {
                         try {
                             time = Integer.parseInt(args[0]);
@@ -171,6 +180,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
             completions.add("reload");
             completions.add("teleportall");
             completions.add("help");
+            completions.add("skip");
             return completions.stream()
                     .filter(s -> s.startsWith(args[0]))
                     .collect(Collectors.toList());
