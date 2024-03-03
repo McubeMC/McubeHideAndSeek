@@ -1,5 +1,5 @@
 name: HASPlugin
-version: 2.4.4
+version: 2.4.5
 # '1.0-SNAPSHOT'
 main: de.vmoon.hasplugin.HASPlugin
 api-version: '1.20'
@@ -47,7 +47,6 @@ commands:
         permission: pvp.off
   hashelp:
     description: Hilfe für die befehle
-    usage: /hashelp {befehl}
     permission: hashelp.use
     children:
       hashelp.cancel:
