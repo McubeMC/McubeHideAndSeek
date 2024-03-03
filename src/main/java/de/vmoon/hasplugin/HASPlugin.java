@@ -8,7 +8,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class HASPlugin extends JavaPlugin {
     private static HASPlugin plugin;
-    private pvpCommand pvpCommand;
 
     @Override
     public void onEnable() {
@@ -18,7 +17,6 @@ public final class HASPlugin extends JavaPlugin {
         getCommand("has").setExecutor(new HasCommand());
         getCommand("pvp").setExecutor(new pvpCommand());
         getCommand("hashelp").setExecutor(new helpCommand());
-        pvpCommand.disablepvp();
 
     }
 
