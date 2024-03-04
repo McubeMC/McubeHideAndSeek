@@ -20,21 +20,12 @@ public class helpCommand implements CommandExecutor, TabCompleter, Listener {
             }
             else {
                 if (strings.length == 0) {
-                    commandSender.sendMessage("§l§n§2-----Help-----§r\n/has [select|stop|cancel|{time}|reload|teleportall]\n");
+                    commandSender.sendMessage("§l§n§2-----Help-----§r\n/has [select|stop|{time}|reload|teleportall]\n");
                     commandSender.sendMessage("Bei welchem befehl brauchst du Hilfe?");
                     return true;
                 }
                 else {
-                    if (strings[0].equalsIgnoreCase("cancel")) {
-                        if (!commandSender.hasPermission("hashelp.cancel")) {
-                            commandSender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
-                            return true;
-                        }
-                        else {
-                            commandSender.sendMessage("§l§n§2-----Help-----§r\n/has cancel\nDamit brichst du ein laufendes Spiel ab.");
-                        }
-                    }
-                    else if (strings[0].equalsIgnoreCase("reload")) {
+                    if (strings[0].equalsIgnoreCase("reload")) {
                         if (!commandSender.hasPermission("hashelp.reload")) {
                             commandSender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
                             return true;
@@ -89,7 +80,6 @@ public class helpCommand implements CommandExecutor, TabCompleter, Listener {
     public List<String> onTabComplete(CommandSender commandSender, Command command, String alias, String[] strings) {
         if (strings.length == 1) {
             List<String> completions = new ArrayList<>();
-            completions.add("cancel");
             completions.add("reload");
             completions.add("select");
             completions.add("stop");

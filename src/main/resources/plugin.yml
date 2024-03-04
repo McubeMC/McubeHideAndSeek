@@ -1,5 +1,5 @@
 name: HASPlugin
-version: 2.5.0
+version: 2.5.3
 # '${project.version}'
 main: de.vmoon.hasplugin.HASPlugin
 api-version: '1.20'
@@ -9,12 +9,9 @@ website: https://hasplugin.vmoon.de/
 commands:
   has:
     description: The main Hide-and-Seek Command
-    usage: /has [stop|cancel|select|teleportall]
+    usage: /has [stop|select|teleportall]
     permission: has.run
     children:
-      has.cancel:
-        description: Bricht ein laufendes Spiel ab.
-        permission: has.cancel
       has.stop:
         description: Bricht den laufenden Timer ab.
         permission: has.stop
@@ -52,9 +49,6 @@ commands:
     description: Hilfe für die befehle
     permission: hashelp.use
     children:
-      hashelp.cancel:
-        description: Hilfe für /has cancel
-        permission: hashelp.cancel
       hashelp.reload:
         description: Hilfe für /has reload
         permission: hashelp.reload
@@ -74,9 +68,6 @@ permissions:
   has.run:
     description: The main Hide-and-Seek Command
     default: true
-  has.cancel:
-    description: Bricht ein laufendes Spiel ab.
-    default: op
   has.stop:
     description: Bricht den laufenden Timer ab.
     default: op
@@ -109,9 +100,6 @@ permissions:
     default: op
   hashelp.use:
     description: Hilfe für /has
-    default: op
-  hashelp.cancel:
-    description: Hilfe für /has cancel
     default: op
   hashelp.reload:
     description: Hilfe für /has reload

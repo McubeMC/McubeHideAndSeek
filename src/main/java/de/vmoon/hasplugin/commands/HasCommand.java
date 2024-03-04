@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 
 public class HasCommand implements CommandExecutor, TabCompleter, Listener {
     private int defaultTime = 90;
+    private boolean gamerunning;
     private int time = defaultTime;
     private BukkitRunnable runnable;
     private boolean timerRunning = false;
@@ -56,8 +57,6 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                         selectedPlayer = selectRandomPlayer();
                     }
                     startgame();
-
-
                     return true;
                 }
                 else {
@@ -66,12 +65,9 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                             sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
                             return true;
                         }
+                        cancelgame();
                         if (timerRunning) {
                             stopTimer();
-                            for (Player player : Bukkit.getOnlinePlayers()) {
-                                player.getInventory().clear();
-                            }
-                            Bukkit.broadcastMessage("Der Timer wurde gestoppt.");
                         }
                         else {
                             sender.sendMessage("Es läuft kein Timer.");
@@ -106,24 +102,21 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                         }
                         return true;
                     }
-                    else if (args[0].equalsIgnoreCase("teleportall")) {
-                        if (!sender.hasPermission("has.teleportall")) {
+                    else if (args[0].equalsIgnoreCase("skip")) {
+                        if (!sender.hasPermission("has.skip")) {
                             sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
                             return true;
                         }
-                        teleportAllPlayers();
-                        sender.sendMessage("Alle Spieler wurden zu den gespeicherten Koordinaten teleportiert.");
-                        return true;
-                    }
-                    else if (args[0].equalsIgnoreCase("cancel")) {
-                        if (!sender.hasPermission("has.cancel")) {
-                            sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
-                            return true;
+                        if (timerRunning) {
+                            time = 5;
+                            Bukkit.broadcastMessage("§a§lDer Timer wurde auf 5 Sekunden gesetzt!");
                         }
-                        cancelgame();
+                        else {
+                            sender.sendMessage("Es läuft kein Timer. Bitte starte erst einen, um ihn zu skippen!");
+                        }
                         return true;
                     }
-                    else if (args[0].equalsIgnoreCase("reload")) {
+                    if (args[0].equalsIgnoreCase("reload")) {
                         if (!sender.hasPermission("has.reload")) {
                             sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
                             return true;
@@ -139,18 +132,13 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                         sender.sendMessage("Bitte benutze /hashelp!");
                         return true;
                     }
-                    else if (args[0].equalsIgnoreCase("skip")) {
-                        if (!sender.hasPermission("has.skip")) {
+                    else if (args[0].equalsIgnoreCase("teleportall")) {
+                        if (!sender.hasPermission("has.teleportall")) {
                             sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
                             return true;
                         }
-                        if (timerRunning) {
-                            time = 5;
-                            Bukkit.broadcastMessage("§a§lDer Timer wurde auf 5 Sekunden gesetzt!");
-                        }
-                        else {
-                            sender.sendMessage("Es läuft kein Timer. Bitte starte erst einen, um ihn zu skippen!");
-                        }
+                        teleportAllPlayers();
+                        sender.sendMessage("Alle Spieler wurden zu den gespeicherten Koordinaten teleportiert.");
                         return true;
                     }
                     else {
@@ -168,9 +156,13 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                     }
                 }
             }
-            else {
-                Bukkit.broadcastMessage("§cEs ist nur ein Spieler online. Es müssen mindestens 2 Spieler auf dem Server sein!");
+            else if (Bukkit.getOnlinePlayers().size() == 1){
+                sender.sendMessage("§cEs ist nur ein Spieler online. Es müssen mindestens 2 Spieler auf dem Server sein!");
             }
+            else {
+                sender.sendMessage("§cLeider ist es zu einem Fehler gekommen. Bitte versuche es erneut!");
+            }
+
         }
         return false;
     }
@@ -181,7 +173,6 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
             List<String> completions = new ArrayList<>();
             completions.add("stop");
             completions.add("select");
-            completions.add("cancel");
             completions.add("reload");
             completions.add("teleportall");
             completions.add("help");
@@ -349,6 +340,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
             player.getInventory().clear();
             enablepvp();
             noNameTagTeam.addEntry(player.getName());
+            gamerunning = true;
         }
         startTimer();
     }
@@ -357,8 +349,8 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
             player.setGameMode(GameMode.ADVENTURE);
             player.getInventory().clear();
             disablepvp();
+            gamerunning = false;
         }
-        Bukkit.broadcastMessage("§cDas Spiel wurde abgebrochen!");
     }
     private void checkIfSelectedPlayerKilledEveryone() {
         if (selectedPlayer == null || !selectedPlayer.isOnline()) {
