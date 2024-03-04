@@ -144,8 +144,8 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                             sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
                             return true;
                         }
-                        teleportAllPlayers();
-                        sender.sendMessage("SKIPPED");
+                        time = 5;
+                        sender.sendMessage("§a§lDer Timer wurde auf 5 Sekunden gesetzt!");
                         return true;
                     }
                     else {
