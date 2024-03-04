@@ -144,8 +144,13 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                             sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
                             return true;
                         }
-                        time = 5;
-                        sender.sendMessage("§a§lDer Timer wurde auf 5 Sekunden gesetzt!");
+                        if (timerRunning) {
+                            time = 5;
+                            Bukkit.broadcastMessage("§a§lDer Timer wurde auf 5 Sekunden gesetzt!");
+                        }
+                        else {
+                            sender.sendMessage("Es läuft kein Timer. Bitte starte erst einen, um ihn zu skippen!");
+                        }
                         return true;
                     }
                     else {
@@ -199,13 +204,19 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
-        player.setGameMode(GameMode.SPECTATOR);
-        checkIfSelectedPlayerKilledEveryone();
-        if (timerRunning)
-            if (allPlayersDead()) {
-                gameEnd();
-                stopTimer();
+        if (player != selectedPlayer) {
+            selectedPlayer.setGameMode(GameMode.SPECTATOR);
+        }
+        else {
+            player.setGameMode(GameMode.ADVENTURE);
+            checkIfSelectedPlayerKilledEveryone();
+            if (timerRunning) {
+                if (allPlayersDead()) {
+                    gameEnd();
+                    stopTimer();
+                }
             }
+        }
     }
 
     @EventHandler
