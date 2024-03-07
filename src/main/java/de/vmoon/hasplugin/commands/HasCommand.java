@@ -50,7 +50,33 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                 sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
                 return true;
             }
-            if (moreThanOnePlayerOnline()) {
+            else if (args[0].equalsIgnoreCase("reload")) {
+                if (!sender.hasPermission("has.reload")) {
+                    sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
+                    return true;
+                }
+                sender.sendMessage("§6Config erfolgreich neu geladen!");
+                reload();
+            }
+            else if (args[0].equalsIgnoreCase("help")) {
+                if (!sender.hasPermission("has.help")) {
+                    sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
+                    return true;
+                }
+                sender.sendMessage("Bitte benutze /hashelp!");
+                return true;
+            }
+            else if (args[0].equalsIgnoreCase("teleportall")) {
+                if (!sender.hasPermission("has.teleportall")) {
+                    sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
+                    return true;
+                }
+                teleportAllPlayers();
+                sender.sendMessage("Alle Spieler wurden zu den gespeicherten Koordinaten teleportiert.");
+                return true;
+            }
+
+            else if (moreThanOnePlayerOnline()) {
                 if (args.length == 0) {
                     time = defaultTime;
                     if (selectedPlayer == null || !selectedPlayer.isOnline()) {
@@ -114,31 +140,6 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                         else {
                             sender.sendMessage("Es läuft kein Timer. Bitte starte erst einen, um ihn zu skippen!");
                         }
-                        return true;
-                    }
-                    if (args[0].equalsIgnoreCase("reload")) {
-                        if (!sender.hasPermission("has.reload")) {
-                            sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
-                            return true;
-                        }
-                        sender.sendMessage("§6Config erfolgreich neu geladen!");
-                        reload();
-                    }
-                    else if (args[0].equalsIgnoreCase("help")) {
-                        if (!sender.hasPermission("has.help")) {
-                            sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
-                            return true;
-                        }
-                        sender.sendMessage("Bitte benutze /hashelp!");
-                        return true;
-                    }
-                    else if (args[0].equalsIgnoreCase("teleportall")) {
-                        if (!sender.hasPermission("has.teleportall")) {
-                            sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
-                            return true;
-                        }
-                        teleportAllPlayers();
-                        sender.sendMessage("Alle Spieler wurden zu den gespeicherten Koordinaten teleportiert.");
                         return true;
                     }
                     else {
