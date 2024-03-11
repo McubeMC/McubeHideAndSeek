@@ -332,7 +332,6 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
         if (player != null) {
             ItemStack diamondSword = new ItemStack(Material.DIAMOND_SWORD);
             ItemMeta meta = diamondSword.getItemMeta();
-            meta.setDisplayName("§bDiamantschwert");
             diamondSword.setItemMeta(meta);
             player.getInventory().addItem(diamondSword);
         }
