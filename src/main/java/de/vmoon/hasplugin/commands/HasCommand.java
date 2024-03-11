@@ -75,96 +75,103 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                 sender.sendMessage("Alle Spieler wurden zu den gespeicherten Koordinaten teleportiert.");
                 return true;
             }
-
-            else if (moreThanOnePlayerOnline()) {
-                if (args.length == 0) {
-                    time = defaultTime;
+            else if (args[0].equalsIgnoreCase("stop")) {
+                    if (!sender.hasPermission("has.stop")) {
+                        sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
+                        return true;
+                    }
+                    if (!moreThanOnePlayerOnline()) {
+                        sender.sendMessage("Es sind nicht genug Spieler online!");
+                        return true;
+                    }
+                    cancelgame();
+                    if (timerRunning) {
+                        stopTimer();
+                    }
+                    else {
+                        sender.sendMessage("Es läuft kein Timer.");
+                    }
+                    return true;
+            }
+            else if (args[0].equalsIgnoreCase("select")) {
+                if (!sender.hasPermission("has.select")) {
+                    sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
+                    return true;
+                }
+                if (!moreThanOnePlayerOnline()) {
+                    sender.sendMessage("Es sind nicht genug Spieler online!");
+                    return true;
+                }
+                if (args.length == 2) {
+                    if (!sender.hasPermission("has.select.random")) {
+                        sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
+                        return true;
+                    }
+                    if (args[1].equalsIgnoreCase("random")) {
+                        selectedPlayer = selectRandomPlayer();
+                        sender.sendMessage("Ein neuer zufälliger Spieler wurde ausgewählt!");
+                    }
+                    else {
+                        Player newSelectedPlayer = Bukkit.getPlayer(args[1]);
+                        if (newSelectedPlayer != null && newSelectedPlayer.isOnline()) {
+                            selectedPlayer = newSelectedPlayer;
+                            sender.sendMessage(selectedPlayer.getName() + " wurde als der gesuchte Spieler ausgewählt!");
+                        }
+                        else {
+                            sender.sendMessage("Der angegebene Spieler ist nicht online.");
+                        }
+                    }
+                }
+                else {
+                        sender.sendMessage("Verwendung: /has select <Spieler | random>");
+                }
+                return true;
+            }
+            else if (args[0].equalsIgnoreCase("skip")) {
+                if (!sender.hasPermission("has.skip")) {
+                    sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
+                    return true;
+                }
+                if (!moreThanOnePlayerOnline()) {
+                    sender.sendMessage("Es sind nicht genug Spieler online!");
+                    return true;
+                }
+                if (timerRunning) {
+                    time = 5;
+                    Bukkit.broadcastMessage("§a§lDer Timer wurde auf 5 Sekunden gesetzt!");
+                }
+                else {
+                    sender.sendMessage("Es läuft kein Timer. Bitte starte erst einen, um ihn zu skippen!");
+                }
+                return true;
+            }
+            else {
+                if (!moreThanOnePlayerOnline()) {
+                    sender.sendMessage("Es sind nicht genug Spieler online!");
+                    return true;
+                }
+                try {
+                    time = Integer.parseInt(args[0]);
+                    Bukkit.broadcastMessage("Die Zeit wurde auf " + time + " Sekunden gesetzt.");
                     if (selectedPlayer == null || !selectedPlayer.isOnline()) {
                         selectedPlayer = selectRandomPlayer();
                     }
                     startgame();
-                    return true;
+                    enablepvp();
                 }
-                else {
-                    if (args[0].equalsIgnoreCase("stop")) {
-                        if (!sender.hasPermission("has.stop")) {
-                            sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
-                            return true;
-                        }
-                        cancelgame();
-                        if (timerRunning) {
-                            stopTimer();
-                        }
-                        else {
-                            sender.sendMessage("Es läuft kein Timer.");
-                        }
-                        return true;
-                    }
-                    else if (args[0].equalsIgnoreCase("select")) {
-                        if (!sender.hasPermission("has.select")) {
-                            sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
-                            return true;
-                        }
-                        if (args.length == 2) {
-                            if (!sender.hasPermission("has.select.random")) {
-                                sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
-                                return true;
-                            }
-                            if (args[1].equalsIgnoreCase("random")) {
-                                selectedPlayer = selectRandomPlayer();
-                                sender.sendMessage("Ein neuer zufälliger Spieler wurde ausgewählt!");
-                            } else {
-                                Player newSelectedPlayer = Bukkit.getPlayer(args[1]);
-                                if (newSelectedPlayer != null && newSelectedPlayer.isOnline()) {
-                                    selectedPlayer = newSelectedPlayer;
-                                    sender.sendMessage(selectedPlayer.getName() + " wurde als der gesuchte Spieler ausgewählt!");
-                                } else {
-                                    sender.sendMessage("Der angegebene Spieler ist nicht online.");
-                                }
-                            }
-                        }
-                        else {
-                            sender.sendMessage("Verwendung: /has select <Spieler | random>");
-                        }
-                        return true;
-                    }
-                    else if (args[0].equalsIgnoreCase("skip")) {
-                        if (!sender.hasPermission("has.skip")) {
-                            sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
-                            return true;
-                        }
-                        if (timerRunning) {
-                            time = 5;
-                            Bukkit.broadcastMessage("§a§lDer Timer wurde auf 5 Sekunden gesetzt!");
-                        }
-                        else {
-                            sender.sendMessage("Es läuft kein Timer. Bitte starte erst einen, um ihn zu skippen!");
-                        }
-                        return true;
-                    }
-                    else {
-                        try {
-                            time = Integer.parseInt(args[0]);
-                            Bukkit.broadcastMessage("Die Zeit wurde auf " + time + " Sekunden gesetzt.");
-                            if (selectedPlayer == null || !selectedPlayer.isOnline()) {
-                                selectedPlayer = selectRandomPlayer();
-                            }
-                            startgame();
-                            enablepvp();
-                        } catch (NumberFormatException e) {
-                            sender.sendMessage("Bitte gib eine gültige Zahl ein oder verwende 'stop' zum Stoppen des Timers.");
-                        }
-                    }
+                catch (NumberFormatException e) {
+                    sender.sendMessage("Bitte gib eine gültige Zahl ein.");
                 }
             }
-            else if (Bukkit.getOnlinePlayers().size() == 1){
-                sender.sendMessage("§cEs ist nur ein Spieler online. Es müssen mindestens 2 Spieler auf dem Server sein!");
+            if (args.length == 0) {
+                time = defaultTime;
+                if (selectedPlayer == null || !selectedPlayer.isOnline()) {
+                    selectedPlayer = selectRandomPlayer();
+                }
+                startgame();
+                return true;
+                }
             }
-            else {
-                sender.sendMessage("§cLeider ist es zu einem Fehler gekommen. Bitte versuche es erneut!");
-            }
-
-        }
         return false;
     }
 
