@@ -8,8 +8,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.ShulkerBullet;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -212,6 +212,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
         Player player = event.getEntity();
         if (player != selectedPlayer) {
             player.setGameMode(GameMode.SPECTATOR);
+            checkIfSelectedPlayerKilledEveryone();
         }
         else {
             player.setGameMode(GameMode.ADVENTURE);
@@ -332,6 +333,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
         if (player != null) {
             ItemStack diamondSword = new ItemStack(Material.DIAMOND_SWORD);
             ItemMeta meta = diamondSword.getItemMeta();
+            meta.addEnchant(Enchantment.DAMAGE_ALL, 5, true);
             diamondSword.setItemMeta(meta);
             player.getInventory().addItem(diamondSword);
         }
@@ -382,6 +384,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
             Bukkit.getScheduler().runTaskLater(HASPlugin.getPlugin(), () -> {
                 teleportAllPlayers();
                 for (Player player : Bukkit.getOnlinePlayers()) {
+                    player.sendTitle("§cDer Sucher §f(" + selectedPlayer.getName() + ")§c hat alle Spieler getötet!", "", 10, 70, 20);
                     player.setGameMode(GameMode.ADVENTURE);
                     player.getInventory().clear();
                 }
