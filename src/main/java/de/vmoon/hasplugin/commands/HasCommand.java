@@ -381,10 +381,12 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
         if (countAlivePlayers == 0) {
             Bukkit.broadcastMessage("§cDer Sucher §f(" + selectedPlayer.getName() + ")§c hat alle Spieler getötet!");
             disablepvp();
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                player.sendTitle("§2Alle Gefunden!", "$cSucher: §r" + selectedPlayer.getName(), 10, 70, 20);
+            }
             Bukkit.getScheduler().runTaskLater(HASPlugin.getPlugin(), () -> {
                 teleportAllPlayers();
                 for (Player player : Bukkit.getOnlinePlayers()) {
-                    player.sendTitle("§cDer Sucher §f(" + selectedPlayer.getName() + ")§c hat alle Spieler getötet!", "", 10, 70, 20);
                     player.setGameMode(GameMode.ADVENTURE);
                     player.getInventory().clear();
                 }
