@@ -13,8 +13,7 @@ public final class HASPlugin extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
         plugin = this;
-        Bukkit.getWorld("world").setPVP(true);
-        Bukkit.getConsoleSender().sendMessage("§6[DEBUG] PVP wurde aktiviert!");
+        Bukkit.getWorld("world").setPVP(false);
         Bukkit.getConsoleSender().sendMessage("§6HASPlugin erfolgreich geladen!");
         getCommand("has").setExecutor(new HasCommand());
         getCommand("pvp").setExecutor(new pvpCommand());
