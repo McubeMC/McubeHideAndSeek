@@ -82,7 +82,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                         sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
                         return true;
                     }
-                    sender.sendMessage("§c[HASPlugin] §rHASPlugin Version 2.6.2");
+                    sender.sendMessage("§c[HASPlugin] §rHASPlugin Version 2.6.3");
                     return true;
                 }
                 else if (args[0].equalsIgnoreCase("stop")) {
@@ -200,6 +200,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
             completions.add("teleportall");
             completions.add("help");
             completions.add("skip");
+            completions.add("version");
             return completions.stream()
                     .filter(s -> s.startsWith(args[0]))
                     .collect(Collectors.toList());

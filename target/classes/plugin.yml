@@ -1,5 +1,5 @@
 name: HASPlugin
-version: 2.6.2
+version: 2.6.3
 # '1.0-SNAPSHOT'
 main: de.vmoon.hasplugin.HASPlugin
 api-version: '1.20'
@@ -15,6 +15,9 @@ commands:
       has.stop:
         description: Bricht den laufenden Timer ab.
         permission: has.stop
+      has.version:
+        description: Zeigt die Version des Plugins an.
+        permission: has.version
       has.skip:
         description: Skipt den laufenden Timer
         permission: has.skip
@@ -77,6 +80,9 @@ permissions:
   has.select.random:
     description: Wählt einen zufälligen Spieler aus.
     default: op
+  has.version:
+    description: Zeigt die Version des Plugins an.
+    default: true
   has.teleportall:
     description: Teleportiert alle Spieler zu den Koordinaten in der Config.
     default: op
