@@ -77,6 +77,14 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                     sender.sendMessage("Alle Spieler wurden zu den gespeicherten Koordinaten teleportiert.");
                     return true;
                 }
+                else if (args[0].equalsIgnoreCase("version")) {
+                    if (!sender.hasPermission("has.version")) {
+                        sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
+                        return true;
+                    }
+                    sender.sendMessage("§c[HASPlugin] §rHASPlugin Version 2.6.2");
+                    return true;
+                }
                 else if (args[0].equalsIgnoreCase("stop")) {
                     if (!sender.hasPermission("has.stop")) {
                         sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
@@ -382,7 +390,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
             Bukkit.broadcastMessage("§cDer Sucher §f(" + selectedPlayer.getName() + ")§c hat alle Spieler getötet!");
             disablepvp();
             for (Player player : Bukkit.getOnlinePlayers()) {
-                player.sendTitle("§2Alle Gefunden!", "$cSucher: §r" + selectedPlayer.getName(), 10, 70, 20);
+                player.sendTitle("§2Alle Gefunden!", "§cSucher: §r" + selectedPlayer.getName(), 10, 70, 20);
             }
             Bukkit.getScheduler().runTaskLater(HASPlugin.getPlugin(), () -> {
                 teleportAllPlayers();
@@ -416,11 +424,9 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
     }
     private void disablepvp() {
         Bukkit.getWorld("world").setPVP(false);
-        Bukkit.getConsoleSender().sendMessage("§6[DEBUG] PVP wurde deaktiviert!");
     }
     private void enablepvp() {
         Bukkit.getWorld("world").setPVP(true);
-        Bukkit.getConsoleSender().sendMessage("§6[DEBUG] PVP wurde aktiviert!");
     }
 
 }

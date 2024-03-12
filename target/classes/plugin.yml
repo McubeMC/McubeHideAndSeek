@@ -1,5 +1,5 @@
 name: HASPlugin
-version: 2.6.1
+version: 2.6.2
 # '1.0-SNAPSHOT'
 main: de.vmoon.hasplugin.HASPlugin
 api-version: '1.20'
