@@ -75,7 +75,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                         return true;
                     }
                     sender.sendMessage("§aDu hast einen Sound bei dir abgespielt!");
-                    playBiepSound((Player) sender);
+                    playbeep((Player) sender);
                     return true;
                 }
                 else if (args[0].equalsIgnoreCase("teleportall")) {
@@ -92,7 +92,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                         sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
                         return true;
                     }
-                    sender.sendMessage("§c[HASPlugin] §rHASPlugin Version 2.6.5");
+                    sender.sendMessage("§c[HASPlugin] §rHASPlugin Version 2.6.6");
                     return true;
                 }
                 else if (args[0].equalsIgnoreCase("stop")) {
@@ -455,6 +455,13 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
     }
     public void playBiepSound(Player player) {
         player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 1.0f);
+    }
+    public void playbeep(Player executor) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (player.getLocation().distance(executor.getLocation()) <= 50) { // Anpassen des Radius nach Bedarf
+                player.playSound(executor.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 1.0f);
+            }
+        }
     }
 
 }
