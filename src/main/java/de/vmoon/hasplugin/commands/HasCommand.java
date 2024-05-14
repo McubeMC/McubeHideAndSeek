@@ -459,7 +459,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
     public void playbeep(Player executor) {
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (player.getLocation().distance(executor.getLocation()) <= 200) { // Anpassen des Radius nach Bedarf
-                player.playSound(executor.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 1.0f);
+                player.playSound(executor.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 2.0f, 1.0f);
             }
         }
     }
