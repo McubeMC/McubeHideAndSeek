@@ -4,6 +4,7 @@ import de.vmoon.hasplugin.HASPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -68,6 +69,15 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                     sender.sendMessage("Bitte benutze /hashelp!");
                     return true;
                 }
+                else if (args[0].equalsIgnoreCase("beep")) {
+                    if (!sender.hasPermission("has.beep")) {
+                        sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
+                        return true;
+                    }
+                    sender.sendMessage("§aDu hast einen Sound bei dir abgespielt!");
+                    playBiepSound((Player) sender);
+                    return true;
+                }
                 else if (args[0].equalsIgnoreCase("teleportall")) {
                     if (!sender.hasPermission("has.teleportall")) {
                         sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
@@ -82,7 +92,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                         sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
                         return true;
                     }
-                    sender.sendMessage("§c[HASPlugin] §rHASPlugin Version 2.6.3");
+                    sender.sendMessage("§c[HASPlugin] §rHASPlugin Version 2.6.5");
                     return true;
                 }
                 else if (args[0].equalsIgnoreCase("stop")) {
@@ -201,6 +211,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
             completions.add("help");
             completions.add("skip");
             completions.add("version");
+            completions.add("beep");
             return completions.stream()
                     .filter(s -> s.startsWith(args[0]))
                     .collect(Collectors.toList());
@@ -278,6 +289,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                         Bukkit.broadcastMessage("§aNoch " + time + (time == 1 ? " Sekunde" : " Sekunden") + " übrig!");
                         break;
                     case 0:
+                        enablepvp();
                         break;
                 }
 
@@ -340,11 +352,23 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
 
     private void giveDiamondSword(Player player) {
         if (player != null) {
+            // Schwert
             ItemStack diamondSword = new ItemStack(Material.DIAMOND_SWORD);
-            ItemMeta meta = diamondSword.getItemMeta();
-            meta.addEnchant(Enchantment.DAMAGE_ALL, 5, true);
-            diamondSword.setItemMeta(meta);
-            player.getInventory().addItem(diamondSword);
+            ItemMeta swordMeta = diamondSword.getItemMeta();
+            swordMeta.addEnchant(Enchantment.DAMAGE_ALL, 5, true);
+            diamondSword.setItemMeta(swordMeta);
+
+            // Bogen
+            ItemStack bow = new ItemStack(Material.BOW);
+            ItemMeta bowMeta = bow.getItemMeta();
+            bowMeta.addEnchant(Enchantment.ARROW_DAMAGE, 3, true);
+            bow.setItemMeta(bowMeta);
+
+            // Pfeile
+            ItemStack arrows = new ItemStack(Material.ARROW, 64);
+
+            // Items geben
+            player.getInventory().addItem(diamondSword, bow, arrows);
         }
     }
 
@@ -363,7 +387,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
             player.setGameMode(GameMode.ADVENTURE);
             teleportManager.teleportAllPlayers();
             player.getInventory().clear();
-            enablepvp();
+            //enablepvp();
             noNameTagTeam.addEntry(player.getName());
             gamerunning = true;
         }
@@ -428,6 +452,9 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
     }
     private void enablepvp() {
         Bukkit.getWorld("world").setPVP(true);
+    }
+    public void playBiepSound(Player player) {
+        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 1.0f);
     }
 
 }
