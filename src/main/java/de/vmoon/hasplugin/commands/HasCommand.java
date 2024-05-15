@@ -47,6 +47,10 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        selectRandomPlayer();
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            resetActionbarTimer();
+        }
         if (cmd.getName().equalsIgnoreCase("has")) {
             if (!sender.hasPermission("has.run")) {
                 sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
@@ -71,7 +75,6 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                 }
                 else if (args[0].equalsIgnoreCase("debug")) {
                     sender.sendMessage("§cBenutzt!");
-                    startTimerForAllPlayers();
                     return true;
                 }
                 else if (args[0].equalsIgnoreCase("beep")) {
@@ -110,7 +113,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                         sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
                         return true;
                     }
-                    sender.sendMessage("§c[HASPlugin] §rHASPlugin Version BETA 2.6.9");
+                    sender.sendMessage("§c[HASPlugin] §rHASPlugin Version 2.7.0");
                     return true;
                 }
                 else if (args[0].equalsIgnoreCase("stop")) {
@@ -309,6 +312,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                         break;
                     case 0:
                         enablepvp();
+                        startTimerForAllPlayers();
                         break;
                 }
 
@@ -318,7 +322,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                 if (time == 0) {
                     Bukkit.broadcastMessage("§aDie Zeit ist abgelaufen. Der Sucher sucht jetzt");
                     time = defaultTime;
-                    giveDiamondSword(selectedPlayer);
+                    giveItems(selectedPlayer);
                     removeBlindnessEffect();
                     stopTimer();
                     return;
@@ -369,23 +373,20 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
         return null;
     }
 
-    private void giveDiamondSword(Player player) {
+    private void giveItems(Player player) {
         if (player != null) {
             // Schwert
             ItemStack diamondSword = new ItemStack(Material.DIAMOND_SWORD);
             ItemMeta swordMeta = diamondSword.getItemMeta();
             swordMeta.addEnchant(Enchantment.DAMAGE_ALL, 5, true);
             diamondSword.setItemMeta(swordMeta);
-
             // Bogen
             ItemStack bow = new ItemStack(Material.BOW);
             ItemMeta bowMeta = bow.getItemMeta();
             bowMeta.addEnchant(Enchantment.ARROW_DAMAGE, 3, true);
             bow.setItemMeta(bowMeta);
-
             // Pfeile
             ItemStack arrows = new ItemStack(Material.ARROW, 64);
-
             // Items geben
             player.getInventory().addItem(diamondSword, bow, arrows);
         }
@@ -417,6 +418,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
             player.setGameMode(GameMode.ADVENTURE);
             player.getInventory().clear();
             disablepvp();
+            stopActionbarTimer(player);
             gamerunning = false;
         }
     }
@@ -435,6 +437,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
             disablepvp();
             for (Player player : Bukkit.getOnlinePlayers()) {
                 player.sendTitle("§2Alle Gefunden!", "§cSucher: §r" + selectedPlayer.getName(), 10, 70, 20);
+                stopActionbarTimer(player);
             }
             Bukkit.getScheduler().runTaskLater(HASPlugin.getPlugin(), () -> {
                 teleportAllPlayers();
@@ -451,6 +454,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
         disablepvp();
         for (Player player : Bukkit.getOnlinePlayers()) {
             player.sendTitle("§2Alle Gefunden!", "§cSucher: §r" + selectedPlayer.getName(), 10, 70, 20);
+            stopActionbarTimer(player);
         }
         Bukkit.getScheduler().runTaskLater(HASPlugin.getPlugin(), () -> {
             teleportAllPlayers();
@@ -498,7 +502,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
             }
         }
     }
-    public void startTimer(Player player) {
+    public void startActionbarTimer(Player player) {
         if (timers.containsKey(player)) {
             player.sendMessage(ChatColor.RED + "Du hast bereits einen Timer gestartet!");
             return;
@@ -522,6 +526,12 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
         }.runTaskTimer(HASPlugin.getPlugin(), 0, 20);
     }
 
+    public void startTimerForAllPlayers() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            startActionbarTimer(player);
+        }
+    }
+
     private void updateActionBar(Player player, int time) {
         String actionBarMessage;
         if (time >= 60) {
@@ -538,15 +548,12 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
 
     }
 
-    public void stopTimer(Player player) {
+    public void stopActionbarTimer(Player player) {
         timers.remove(player);
     }
-    public void resetTimer(Player player) {
-        timers.put(player, 0);
-    }
-    public void startTimerForAllPlayers() {
+    public void resetActionbarTimer() {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            startTimer(player);
+            timers.put(player, 0);
         }
     }
 
