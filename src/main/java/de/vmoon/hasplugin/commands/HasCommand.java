@@ -1,10 +1,10 @@
 package de.vmoon.hasplugin.commands;
 
 import de.vmoon.hasplugin.HASPlugin;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.*;
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -24,9 +24,8 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
 
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 public class HasCommand implements CommandExecutor, TabCompleter, Listener {
@@ -38,6 +37,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
     private Player selectedPlayer = null;
     private TeleportManager teleportManager;
     private Team noNameTagTeam;
+    private Map<Player, Integer> timers = new HashMap<>();
 
     public HasCommand() {
         this.teleportManager = new TeleportManager();
@@ -69,6 +69,11 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                     sender.sendMessage("Bitte benutze /hashelp!");
                     return true;
                 }
+                else if (args[0].equalsIgnoreCase("debug")) {
+                    sender.sendMessage("§cBenutzt!");
+                    startTimerForAllPlayers();
+                    return true;
+                }
                 else if (args[0].equalsIgnoreCase("beep")) {
                     if (!sender.hasPermission("has.beep")) {
                         sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
@@ -92,6 +97,10 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                         sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
                         return true;
                     }
+                    if (!moreThanOnePlayerOnline()) {
+                        sender.sendMessage("Es sind nicht genug Spieler online!");
+                        return true;
+                    }
                     endgame();
                     sender.sendMessage("Das Spiel wurde beendet!");
                     return true;
@@ -101,7 +110,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                         sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
                         return true;
                     }
-                    sender.sendMessage("§c[HASPlugin] §rHASPlugin Version 2.6.7");
+                    sender.sendMessage("§c[HASPlugin] §rHASPlugin Version BETA 2.6.8");
                     return true;
                 }
                 else if (args[0].equalsIgnoreCase("stop")) {
@@ -487,6 +496,47 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
             if (player.getLocation().distance(executor.getLocation()) <= 200) { // Anpassen des Radius nach Bedarf
                 player.playSound(executor.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 2.0f, 1.0f);
             }
+        }
+    }
+    public void startTimer(Player player) {
+        if (timers.containsKey(player)) {
+            player.sendMessage(ChatColor.RED + "Du hast bereits einen Timer gestartet!");
+            return;
+        }
+
+        timers.put(player, 0);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                int time = timers.get(player);
+                time++;
+
+                if (!timers.containsKey(player)) {
+                    cancel();
+                    return;
+                }
+
+                timers.put(player, time);
+                updateActionBar(player, time); // Aktualisiert die Actionbar mit der aktuellen Zeit
+            }
+        }.runTaskTimer(HASPlugin.getPlugin(), 0, 20);
+    }
+
+    private void updateActionBar(Player player, int time) {
+        String actionBarMessage = ChatColor.GREEN + "Timer: " + ChatColor.WHITE + time + " Sekunden";
+        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(actionBarMessage));
+
+    }
+
+    public void stopTimer(Player player) {
+        timers.remove(player);
+    }
+    public void resetTimer(Player player) {
+        timers.put(player, 0);
+    }
+    public void startTimerForAllPlayers() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            startTimer(player);
         }
     }
 
