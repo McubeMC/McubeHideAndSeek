@@ -20,6 +20,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
@@ -38,6 +39,9 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
     private TeleportManager teleportManager;
     private Team noNameTagTeam;
     private Map<Player, Integer> timers = new HashMap<>();
+    private int globalTimer = 0;
+    private BukkitTask globalTask = null;
+    private BukkitTask countdownTask = null;
 
     public HasCommand() {
         this.teleportManager = new TeleportManager();
@@ -48,9 +52,6 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         selectRandomPlayer();
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            resetActionbarTimer();
-        }
         if (cmd.getName().equalsIgnoreCase("has")) {
             if (!sender.hasPermission("has.run")) {
                 sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
@@ -73,8 +74,25 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                     sender.sendMessage("Bitte benutze /hashelp!");
                     return true;
                 }
-                else if (args[0].equalsIgnoreCase("debug")) {
+                else if (args[0].equalsIgnoreCase("debugstart")) {
                     sender.sendMessage("§cBenutzt!");
+                    for (Player player : Bukkit.getOnlinePlayers()) {
+                        startGlobalTimer();
+                    }
+                    return true;
+                }
+                else if (args[0].equalsIgnoreCase("debugstop")) {
+                    sender.sendMessage("§cBenutzt!");
+                    for (Player player : Bukkit.getOnlinePlayers()) {
+                        stopGlobalTimer();
+                    }
+                    return true;
+                }
+                else if (args[0].equalsIgnoreCase("debugreset")) {
+                    sender.sendMessage("§cBenutzt!");
+                    for (Player player : Bukkit.getOnlinePlayers()) {
+                        resetGlobalTimer();
+                    }
                     return true;
                 }
                 else if (args[0].equalsIgnoreCase("beep")) {
@@ -113,7 +131,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                         sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
                         return true;
                     }
-                    sender.sendMessage("§c[HASPlugin] §rHASPlugin Version 2.7.0");
+                    sender.sendMessage("§c[HASPlugin] §rHASPlugin Version 2.7.1");
                     return true;
                 }
                 else if (args[0].equalsIgnoreCase("stop")) {
@@ -312,7 +330,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                         break;
                     case 0:
                         enablepvp();
-                        startTimerForAllPlayers();
+                        startGlobalTimer();
                         break;
                 }
 
@@ -418,7 +436,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
             player.setGameMode(GameMode.ADVENTURE);
             player.getInventory().clear();
             disablepvp();
-            stopActionbarTimer(player);
+            stopGlobalTimer();
             gamerunning = false;
         }
     }
@@ -437,7 +455,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
             disablepvp();
             for (Player player : Bukkit.getOnlinePlayers()) {
                 player.sendTitle("§2Alle Gefunden!", "§cSucher: §r" + selectedPlayer.getName(), 10, 70, 20);
-                stopActionbarTimer(player);
+                stopGlobalTimer();
             }
             Bukkit.getScheduler().runTaskLater(HASPlugin.getPlugin(), () -> {
                 teleportAllPlayers();
@@ -454,7 +472,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
         disablepvp();
         for (Player player : Bukkit.getOnlinePlayers()) {
             player.sendTitle("§2Alle Gefunden!", "§cSucher: §r" + selectedPlayer.getName(), 10, 70, 20);
-            stopActionbarTimer(player);
+            stopGlobalTimer();
         }
         Bukkit.getScheduler().runTaskLater(HASPlugin.getPlugin(), () -> {
             teleportAllPlayers();
@@ -502,59 +520,59 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
             }
         }
     }
-    public void startActionbarTimer(Player player) {
-        if (timers.containsKey(player)) {
-            player.sendMessage(ChatColor.RED + "Du hast bereits einen Timer gestartet!");
+
+
+    public void startGlobalTimer() {
+        if (globalTask != null) {
+            // Der Timer läuft bereits
             return;
         }
 
-        timers.put(player, 0);
-        new BukkitRunnable() {
+        globalTimer = 0;
+        globalTask = new BukkitRunnable() {
             @Override
             public void run() {
-                int time = timers.get(player);
-                time++;
-
-                if (!timers.containsKey(player)) {
-                    cancel();
-                    return;
-                }
-
-                timers.put(player, time);
-                updateActionBar(player, time); // Aktualisiert die Actionbar mit der aktuellen Zeit
+                globalTimer++;
+                updateGlobalActionBar();
             }
         }.runTaskTimer(HASPlugin.getPlugin(), 0, 20);
     }
 
-    public void startTimerForAllPlayers() {
+    public void stopGlobalTimer() {
+        if (globalTask != null) {
+            globalTask.cancel();
+            globalTask = null;
+            updateGlobalActionBar();
+            globalTimer = 0;
+        }
+    }
+    public void resetGlobalTimer() {
+        stopGlobalTimer();
+        globalTimer = 0;
+        updateGlobalActionBar();
+
+        // Wenn bereits ein Countdown läuft, breche ihn ab
+        if (countdownTask != null) {
+            countdownTask.cancel();
+        }
+
+        // Starte einen neuen Countdown für 5 Sekunden
+        countdownTask = new BukkitRunnable() {
+            @Override
+            public void run() {
+                globalTimer = 0;
+                updateGlobalActionBar();
+            }
+        }.runTaskLater(HASPlugin.getPlugin(), 5 * 20); // 5 Sekunden (20 Ticks pro Sekunde)
+    }
+
+    public void updateGlobalActionBar() {
+        String actionBarMessage = ChatColor.GREEN + "Globaler Timer: " + ChatColor.WHITE + globalTimer + " Sekunden";
+
         for (Player player : Bukkit.getOnlinePlayers()) {
-            startActionbarTimer(player);
+            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(actionBarMessage));
         }
     }
 
-    private void updateActionBar(Player player, int time) {
-        String actionBarMessage;
-        if (time >= 60) {
-            int minutes = time / 60;
-            int seconds = time % 60;
-            String minuteString = (minutes != 1) ? " Minuten" : " Minute";
-            String secondString = (seconds != 1) ? " Sekunden" : " Sekunde";
-            actionBarMessage = ChatColor.GREEN + "Timer: " + ChatColor.WHITE + minutes + minuteString + " " + seconds + secondString;
-        } else {
-            actionBarMessage = ChatColor.GREEN + "Timer: " + ChatColor.WHITE + time + " Sekunden";
-        }
-
-        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(actionBarMessage));
-
-    }
-
-    public void stopActionbarTimer(Player player) {
-        timers.remove(player);
-    }
-    public void resetActionbarTimer() {
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            timers.put(player, 0);
-        }
-    }
 
 }
