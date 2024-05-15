@@ -110,7 +110,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                         sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
                         return true;
                     }
-                    sender.sendMessage("§c[HASPlugin] §rHASPlugin Version BETA 2.6.8");
+                    sender.sendMessage("§c[HASPlugin] §rHASPlugin Version BETA 2.6.9");
                     return true;
                 }
                 else if (args[0].equalsIgnoreCase("stop")) {
@@ -523,7 +523,17 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
     }
 
     private void updateActionBar(Player player, int time) {
-        String actionBarMessage = ChatColor.GREEN + "Timer: " + ChatColor.WHITE + time + " Sekunden";
+        String actionBarMessage;
+        if (time >= 60) {
+            int minutes = time / 60;
+            int seconds = time % 60;
+            String minuteString = (minutes != 1) ? " Minuten" : " Minute";
+            String secondString = (seconds != 1) ? " Sekunden" : " Sekunde";
+            actionBarMessage = ChatColor.GREEN + "Timer: " + ChatColor.WHITE + minutes + minuteString + " " + seconds + secondString;
+        } else {
+            actionBarMessage = ChatColor.GREEN + "Timer: " + ChatColor.WHITE + time + " Sekunden";
+        }
+
         player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(actionBarMessage));
 
     }
