@@ -87,12 +87,21 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                     sender.sendMessage("Alle Spieler wurden zu den gespeicherten Koordinaten teleportiert.");
                     return true;
                 }
+                else if (args[0].equalsIgnoreCase("endgame")) {
+                    if (!sender.hasPermission("has.endgame")) {
+                        sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
+                        return true;
+                    }
+                    endgame();
+                    sender.sendMessage("Das Spiel wurde beendet!");
+                    return true;
+                }
                 else if (args[0].equalsIgnoreCase("version")) {
                     if (!sender.hasPermission("has.version")) {
                         sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
                         return true;
                     }
-                    sender.sendMessage("§c[HASPlugin] §rHASPlugin Version 2.6.6");
+                    sender.sendMessage("§c[HASPlugin] §rHASPlugin Version 2.6.7");
                     return true;
                 }
                 else if (args[0].equalsIgnoreCase("stop")) {
@@ -212,6 +221,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
             completions.add("skip");
             completions.add("version");
             completions.add("beep");
+            completions.add("endgame");
             return completions.stream()
                     .filter(s -> s.startsWith(args[0]))
                     .collect(Collectors.toList());
@@ -412,7 +422,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                 .count();
 
         if (countAlivePlayers == 0) {
-            Bukkit.broadcastMessage("§cDer Sucher §f(" + selectedPlayer.getName() + ")§c hat alle Spieler getötet!");
+            Bukkit.broadcastMessage("§cDer Sucher §f(" + selectedPlayer.getName() + ")§c hat alle Spieler gefunden!");
             disablepvp();
             for (Player player : Bukkit.getOnlinePlayers()) {
                 player.sendTitle("§2Alle Gefunden!", "§cSucher: §r" + selectedPlayer.getName(), 10, 70, 20);
@@ -426,6 +436,22 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
             }, 20L * 5);
         }
     }
+
+    private void endgame() {
+        Bukkit.broadcastMessage("§cDer Sucher §f(" + selectedPlayer.getName() + ")§c hat alle Spieler gefunden!");
+        disablepvp();
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            player.sendTitle("§2Alle Gefunden!", "§cSucher: §r" + selectedPlayer.getName(), 10, 70, 20);
+        }
+        Bukkit.getScheduler().runTaskLater(HASPlugin.getPlugin(), () -> {
+            teleportAllPlayers();
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                player.setGameMode(GameMode.ADVENTURE);
+                player.getInventory().clear();
+            }
+        }, 20L * 5);
+    }
+
     private void setupNoNameTagTeam() {
         ScoreboardManager manager = Bukkit.getScoreboardManager();
         if (manager != null) {
@@ -453,9 +479,9 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
     private void enablepvp() {
         Bukkit.getWorld("world").setPVP(true);
     }
-    public void playBiepSound(Player player) {
-        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 1.0f);
-    }
+    //public void playBiepSound(Player player) {
+    //    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 1.0f);
+    //}
     public void playbeep(Player executor) {
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (player.getLocation().distance(executor.getLocation()) <= 200) { // Anpassen des Radius nach Bedarf

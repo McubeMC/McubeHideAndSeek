@@ -1,5 +1,5 @@
 name: HASPlugin
-version: 2.6.6
+version: 2.6.7
 # '1.0-SNAPSHOT'
 main: de.vmoon.hasplugin.HASPlugin
 api-version: '1.20'
@@ -37,6 +37,12 @@ commands:
       has.help:
         description: Hilfe für den Befehl
         permission: has.help
+      has.beep:
+        description: Spielt einen Sound beim ausführenden Spieler aus
+        permission: has.beep
+      has.endgame:
+        description: Beendet das laufende Spiel mit der End Animation
+        permission: has.endgame
   pvp:
     description: Aktiviert oder deaktiviert PVP.
     usage: /pvp [on|off]
@@ -94,6 +100,12 @@ permissions:
     default: op
   has.skip:
     description: Skippt den laufenden Timer
+    default: op
+  has.beep:
+    description: Spielt einen Sound beim ausführenden Spieler aus
+    default: op
+  has.endgame:
+    description: Beendet das laufende Spiel mit einer Animation.
     default: op
   pvp.use:
     description: Aktiviert oder Deaktiviert PVP.
