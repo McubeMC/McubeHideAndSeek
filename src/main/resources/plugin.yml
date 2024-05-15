@@ -1,5 +1,5 @@
 name: HASPlugin
-version: 2.7.1
+version: 2.7.2
 # '${project.version}'
 main: de.vmoon.hasplugin.HASPlugin
 api-version: '1.20'
@@ -9,7 +9,6 @@ website: https://hasplugin.vmoon.de/
 commands:
   has:
     description: The main Hide-and-Seek Command
-    usage: /has [stop|select|reload|teleportall|help|skip|version|beep|endgame]
     permission: has.run
     children:
       has.stop:
@@ -45,7 +44,6 @@ commands:
         permission: has.endgame
   pvp:
     description: Aktiviert oder deaktiviert PVP.
-    usage: /pvp [on|off]
     permission: pvp.use
     children:
       pvp.on:

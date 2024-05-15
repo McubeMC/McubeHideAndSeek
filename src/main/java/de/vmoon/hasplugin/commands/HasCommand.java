@@ -131,7 +131,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                         sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
                         return true;
                     }
-                    sender.sendMessage("§c[HASPlugin] §rHASPlugin Version 2.7.1");
+                    sender.sendMessage("§c[HASPlugin] §rHASPlugin Version 2.7.2");
                     return true;
                 }
                 else if (args[0].equalsIgnoreCase("stop")) {
@@ -567,10 +567,21 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
     }
 
     public void updateGlobalActionBar() {
-        String actionBarMessage = ChatColor.GREEN + "Globaler Timer: " + ChatColor.WHITE + globalTimer + " Sekunden";
+        int minutes = globalTimer / 60;
+        int remainingSeconds = globalTimer % 60;
+        String minuteString = minutes > 1 ? " Minuten" : " Minute";
+        String secondString = remainingSeconds > 1 ? " Sekunden" : " Sekunde";
+
+        String timeMessage = ChatColor.GREEN + "Timer: " + ChatColor.WHITE;
+
+        if (minutes > 0) {
+            timeMessage += minutes + minuteString + " ";
+        }
+
+        timeMessage += remainingSeconds + secondString;
 
         for (Player player : Bukkit.getOnlinePlayers()) {
-            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(actionBarMessage));
+            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(timeMessage));
         }
     }
 

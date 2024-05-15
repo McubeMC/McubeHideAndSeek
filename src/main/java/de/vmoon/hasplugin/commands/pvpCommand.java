@@ -30,15 +30,17 @@ public class pvpCommand implements CommandExecutor, TabCompleter {
                             return true;
                         }
                         else {
+                            sender.sendMessage("§2PVP wurde aktiviert!");
                             enablepvp();
                         }
                     }
                     else if (args[0].equalsIgnoreCase("off")) {
-                        if (!sender.hasPermission("pvp.on")) {
+                        if (!sender.hasPermission("pvp.off")) {
                             sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
                             return true;
                         }
                         else {
+                            sender.sendMessage("§2PVP wurde deaktiviert!");
                             disablepvp();
                         }
                     }
