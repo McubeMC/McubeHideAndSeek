@@ -399,10 +399,10 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
     private void giveItems(Player player) {
         if (player != null) {
             // Schwert
-            ItemStack diamondSword = new ItemStack(Material.DIAMOND_SWORD);
-            ItemMeta swordMeta = diamondSword.getItemMeta();
+            ItemStack netheriteSword = new ItemStack(Material.NETHERITE_SWORD);
+            ItemMeta swordMeta = netheriteSword.getItemMeta();
             swordMeta.addEnchant(Enchantment.DAMAGE_ALL, 5, true);
-            diamondSword.setItemMeta(swordMeta);
+            netheriteSword.setItemMeta(swordMeta);
             // Bogen
             ItemStack bow = new ItemStack(Material.BOW);
             ItemMeta bowMeta = bow.getItemMeta();
@@ -411,7 +411,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
             // Pfeile
             ItemStack arrows = new ItemStack(Material.ARROW, 64);
             // Items geben
-            player.getInventory().addItem(diamondSword, bow, arrows);
+            player.getInventory().addItem(netheriteSword, bow, arrows);
         }
     }
 
@@ -515,9 +515,6 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
     private void enablepvp() {
         Bukkit.getWorld("world").setPVP(true);
     }
-    //public void playBiepSound(Player player) {
-    //    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 1.0f);
-    //}
     public void playbeep(Player executor) {
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (player.getLocation().distance(executor.getLocation()) <= 200) { // Anpassen des Radius nach Bedarf
