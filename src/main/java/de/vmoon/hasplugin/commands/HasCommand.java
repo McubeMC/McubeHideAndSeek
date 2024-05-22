@@ -113,6 +113,11 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                     sender.sendMessage("Alle Spieler wurden zu den gespeicherten Koordinaten teleportiert.");
                     return true;
                 }
+                else if (args[0].equalsIgnoreCase("time")) {
+                    String globalTimerString = "Abgelaufene Zeit: " + globalTimer;
+                    sender.sendMessage(globalTimerString);
+                    return true;
+                }
                 else if (args[0].equalsIgnoreCase("endgame")) {
                     if (!sender.hasPermission("has.endgame")) {
                         sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
@@ -131,7 +136,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                         sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
                         return true;
                     }
-                    sender.sendMessage("§c[HASPlugin] §rHASPlugin Version 2.7.2");
+                    sender.sendMessage("§c[HASPlugin] §rHASPlugin Version 2.7.3");
                     return true;
                 }
                 else if (args[0].equalsIgnoreCase("stop")) {
