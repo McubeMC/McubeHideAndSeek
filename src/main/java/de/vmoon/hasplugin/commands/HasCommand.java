@@ -456,10 +456,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
             teleportManager.teleportAllPlayers();
             player.getInventory().clear();
             noNameTagTeam.addEntry(player.getName());
-            selectedPlayer.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, 1));
-            if (!player.equals(selectedPlayer)) {
-                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, PotionEffect.INFINITE_DURATION, 0));
-            }
+            giveEffects();
             gamerunning = true;
         }
         startTimer();
@@ -470,7 +467,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
             player.getInventory().clear();
             disablepvp();
             stopGlobalTimer();
-            selectedPlayer.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+            removeEffects();
             gamerunning = false;
         }
     }
@@ -506,8 +503,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
         disablepvp();
         for (Player player : Bukkit.getOnlinePlayers()) {
             player.sendTitle("§2Alle Gefunden!", "§cSucher: §r" + selectedPlayer.getName(), 10, 70, 20);
-            player.removePotionEffect(PotionEffectType.SLOW);
-            player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+            removeEffects();
             stopGlobalTimer();
         }
         Bukkit.getScheduler().runTaskLater(HASPlugin.getPlugin(), () -> {
@@ -615,6 +611,21 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
 
         for (Player player : Bukkit.getOnlinePlayers()) {
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(timeMessage));
+        }
+    }
+    public void removeEffects() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            player.removePotionEffect(PotionEffectType.SLOW);
+            player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+        }
+    }
+
+    public void giveEffects() {
+        selectedPlayer.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, 1));
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (!player.equals(selectedPlayer)) {
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, PotionEffect.INFINITE_DURATION, 0));
+            }
         }
     }
 
