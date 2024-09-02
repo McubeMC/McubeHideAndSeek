@@ -482,19 +482,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                 .count();
 
         if (countAlivePlayers == 0) {
-            Bukkit.broadcastMessage("§cDer Sucher §f(" + selectedPlayer.getName() + ")§c hat alle Spieler gefunden!");
-            disablepvp();
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                player.sendTitle("§2Alle Gefunden!", "§cSucher: §r" + selectedPlayer.getName(), 10, 70, 20);
-                stopGlobalTimer();
-            }
-            Bukkit.getScheduler().runTaskLater(HASPlugin.getPlugin(), () -> {
-                teleportAllPlayers();
-                for (Player player : Bukkit.getOnlinePlayers()) {
-                    player.setGameMode(GameMode.ADVENTURE);
-                    player.getInventory().clear();
-                }
-            }, 20L * 5);
+            endgame();
         }
     }
 
@@ -621,7 +609,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
     }
 
     public void giveEffects() {
-        selectedPlayer.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, 1));
+        selectedPlayer.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, PotionEffect.INFINITE_DURATION, 1));
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (!player.equals(selectedPlayer)) {
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, PotionEffect.INFINITE_DURATION, 0));
