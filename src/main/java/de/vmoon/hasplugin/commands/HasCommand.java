@@ -139,6 +139,14 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                     sender.sendMessage("§c[HASPlugin] §rHASPlugin Version 2.7.3");
                     return true;
                 }
+                else if (args[0].equalsIgnoreCase("vote")) {
+                    if (!sender.hasPermission("has.vote")) {
+                        sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
+                        return true;
+                    }
+                    sender.sendMessage("VOTE");
+                    return true;
+                }
                 else if (args[0].equalsIgnoreCase("stop")) {
                     if (!sender.hasPermission("has.stop")) {
                         sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
@@ -179,7 +187,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                             Player newSelectedPlayer = Bukkit.getPlayer(args[1]);
                             if (newSelectedPlayer != null && newSelectedPlayer.isOnline()) {
                                 selectedPlayer = newSelectedPlayer;
-                                sender.sendMessage(selectedPlayer.getName() + " wurde als der gesuchte Spieler ausgewählt!");
+                                sender.sendMessage(selectedPlayer.getName() + " wurde als der suchender Spieler ausgewählt!");
                             }
                             else {
                                 sender.sendMessage("Der angegebene Spieler ist nicht online.");
@@ -201,8 +209,13 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                         return true;
                     }
                     if (timerRunning) {
-                        time = 5;
-                        Bukkit.broadcastMessage("§a§lDer Timer wurde auf 5 Sekunden gesetzt!");
+                        if (time > 5) {
+                            time = 5;
+                            Bukkit.broadcastMessage("§a§lDer Timer wurde auf 5 Sekunden gesetzt!");
+                        }
+                        else if (time <5) {
+                            sender.sendMessage("Die Zeit ist bereits unter 5 Sekunden!");
+                        }
                     }
                     else {
                         sender.sendMessage("Es läuft kein Timer. Bitte starte erst einen, um ihn zu skippen!");
@@ -257,6 +270,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
             completions.add("version");
             completions.add("beep");
             completions.add("endgame");
+            completions.add("vote");
             return completions.stream()
                     .filter(s -> s.startsWith(args[0]))
                     .collect(Collectors.toList());
@@ -317,6 +331,17 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
             @Override
             public void run() {
                 switch (time) {
+                    case 200:
+                    case 190:
+                    case 180:
+                    case 170:
+                    case 160:
+                    case 150:
+                    case 140:
+                    case 130:
+                    case 120:
+                    case 110:
+                    case 100:
                     case 90:
                     case 80:
                     case 70:
@@ -430,8 +455,8 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
             player.setGameMode(GameMode.ADVENTURE);
             teleportManager.teleportAllPlayers();
             player.getInventory().clear();
-            //enablepvp();
             noNameTagTeam.addEntry(player.getName());
+            selectedPlayer.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, 0));
             gamerunning = true;
         }
         startTimer();

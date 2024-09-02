@@ -1,5 +1,5 @@
 name: HASPlugin
-version: 2.7.3
+version: 2.7.5
 # '1.0-SNAPSHOT'
 main: de.vmoon.hasplugin.HASPlugin
 api-version: '1.20'
@@ -41,7 +41,10 @@ commands:
         permission: has.beep
       has.endgame:
         description: Beendet das laufende Spiel mit der End Animation
-        permission: has.endgame
+        permission: has.
+      has.vote:
+        description: Voten zum verkürzen des wartens
+        permission: has.vote
   pvp:
     description: Aktiviert oder deaktiviert PVP.
     permission: pvp.use
