@@ -111,12 +111,16 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                         sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
                         return true;
                     }
-                    sender.sendMessage("§c[HASPlugin] §rHASPlugin Version 2.8.0");
+                    sender.sendMessage("§c[HASPlugin] §rHASPlugin Version 2.8.1");
                     return true;
                 }
                 else if (args[0].equalsIgnoreCase("vote")) {
                     if (!sender.hasPermission("has.vote")) {
                         sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
+                        return true;
+                    }
+                    if (!moreThanOnePlayerOnline()) {
+                        sender.sendMessage("Es sind nicht genug Spieler online!");
                         return true;
                     }
                     sender.sendMessage("VOTE");
@@ -162,10 +166,6 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                 else if (args[0].equalsIgnoreCase("stop")) {
                     if (!sender.hasPermission("has.stop")) {
                         sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
-                        return true;
-                    }
-                    if (!moreThanOnePlayerOnline()) {
-                        sender.sendMessage("Es sind nicht genug Spieler online!");
                         return true;
                     }
                     cancelgame();
@@ -291,19 +291,44 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
     public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
         if (args.length == 1) {
             List<String> completions = new ArrayList<>();
-            completions.add("stop");
-            completions.add("select");
-            completions.add("reload");
-            completions.add("teleportall");
-            completions.add("help");
-            completions.add("skip");
-            completions.add("version");
-            completions.add("beep");
-            completions.add("endgame");
-            completions.add("vote");
-            completions.add("add");
+            if (sender.hasPermission("has.stop")) {
+                completions.add("stop");
+            }
+            if (sender.hasPermission("has.select")) {
+                completions.add("select");
+            }
+            if (sender.hasPermission("has.reload")) {
+                completions.add("reload");
+            }
+            if (sender.hasPermission("has.teleportall")) {
+                completions.add("teleportall");
+            }
+            if (sender.hasPermission("has.skip")) {
+                completions.add("skip");
+            }
+            if (sender.hasPermission("has.version")) {
+                completions.add("version");
+            }
+            if (sender.hasPermission("has.beep")) {
+                completions.add("beep");
+            }
+            if (sender.hasPermission("has.endgame")) {
+                completions.add("endgame");
+            }
+            if (sender.hasPermission("has.vote")) {
+                completions.add("vote");
+            }
+            if (sender.hasPermission("has.addtime")) {
+                completions.add("add");
+            }
+            if (sender.hasPermission("has.help")) {
+                completions.add("help");
+            }
             if (sender.hasPermission("has.autor")) {
                 completions.add("autor");
+            }
+            if (sender.hasPermission("has.debug")) {
+                completions.add("debugtime");
             }
             return completions.stream()
                     .filter(s -> s.startsWith(args[0]))
@@ -312,7 +337,9 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
         else if (args.length == 2 && args[0].equalsIgnoreCase("select")) {
             List<String> completions = new ArrayList<>();
             completions.addAll(Bukkit.getOnlinePlayers().stream().map(Player::getName).collect(Collectors.toList()));
-            completions.add("random");
+            if (sender.hasPermission("has.select.random")) {
+                completions.add("random");
+            }
             return completions.stream()
                     .filter(s -> s.startsWith(args[1]))
                     .collect(Collectors.toList());
