@@ -13,4 +13,4 @@ Tested on version 1.21.3
 
 ## Download
 - [Modrinth](https://modrinth.com/plugin/hasplugin)
-- [GitHub](https://github.com/VoidableMoon884/HASPlugin)
+- [GitHub](https://github.com/VoidableMoon884/HASPlugin/releases)
