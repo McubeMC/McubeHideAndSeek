@@ -43,6 +43,8 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
     private BukkitTask globalTask = null;
     private BukkitTask countdownTask = null;
     private long countAlivePlayers = 0;
+    // Globale Map, um die Spieler zu tracken, die gevotet haben
+    private final Set<Player> playersVoted = new HashSet<>();
 
     public HasCommand() {
         this.teleportManager = new TeleportManager();
@@ -111,21 +113,73 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                         sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
                         return true;
                     }
-                    sender.sendMessage("§c[HASPlugin] §rHASPlugin Version 2.8.1");
+                    sender.sendMessage("§c[HASPlugin] §rHASPlugin Version 2.8.3");
                     return true;
                 }
+
+
                 else if (args[0].equalsIgnoreCase("vote")) {
-                    if (!sender.hasPermission("has.vote")) {
-                        sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
+                    if (!(sender instanceof Player)) {
+                        sender.sendMessage("§cNur Spieler können diesen Befehl ausführen!");
                         return true;
                     }
+
+                    Player player = (Player) sender;
+
+                    if (!player.hasPermission("has.vote")) {
+                        player.sendMessage("§cDu hast keine Berechtigung, um diesen Befehl auszuführen!");
+                        return true;
+                    }
+
                     if (!moreThanOnePlayerOnline()) {
-                        sender.sendMessage("Es sind nicht genug Spieler online!");
+                        player.sendMessage("§cEs sind nicht genug Spieler online!");
                         return true;
                     }
-                    sender.sendMessage("VOTE");
+
+                    // Überprüfe, ob der ausgewählte Spieler existiert
+                    if (selectedPlayer == null || !Bukkit.getOnlinePlayers().contains(selectedPlayer)) {
+                        player.sendMessage("§cDer ausgewählte Spieler ist nicht online!");
+                        return true;
+                    }
+
+                    // Spieler hinzufügen, wenn sie gevotet haben
+                    if (playersVoted.contains(player)) {
+                        player.sendMessage("§cDu hast bereits gevotet!");
+                        return true;
+                    }
+
+                    playersVoted.add(player);
+                    player.sendMessage("§aDanke für deinen Vote!");
+
+                    // Überprüfen, ob alle Spieler (außer selectedPlayer) gevotet haben
+                    Set<Player> requiredPlayers = Bukkit.getOnlinePlayers().stream()
+                            .filter(p -> !p.equals(selectedPlayer))
+                            .collect(Collectors.toSet());
+
+                    if (playersVoted.containsAll(requiredPlayers)) {
+                        // Alle Spieler haben gevotet, führe die Logik aus
+                        if (timerRunning) {
+                            if (time > 5) {
+                                time = 5;
+                                Bukkit.broadcastMessage("§a§lDer Timer wurde auf 5 Sekunden gesetzt!");
+                            } else if (time < 5) {
+                                player.sendMessage("§cDie Zeit ist bereits unter 5 Sekunden!");
+                            }
+                        } else {
+                            player.sendMessage("§cEs läuft kein Timer. Bitte starte erst einen, um ihn zu skippen!");
+                        }
+
+                        // Liste zurücksetzen, da die Aktion abgeschlossen ist
+                        playersVoted.clear();
+                    } else {
+                        // Noch nicht alle haben gevotet
+                        Bukkit.broadcastMessage("§eNoch nicht alle Spieler haben gevotet!");
+                    }
+
                     return true;
                 }
+
+
                 else if (args[0].equalsIgnoreCase("add")) {
                     if (!sender.hasPermission("has.addtime")) {
                         sender.sendMessage("§cDu hast keine Berechtigung, um diesen Befehl auszuführen!");
