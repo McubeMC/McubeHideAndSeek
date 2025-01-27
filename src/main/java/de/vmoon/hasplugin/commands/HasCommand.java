@@ -82,6 +82,12 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                         sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
                         return true;
                     }
+                    Player player = (Player) sender;
+                    if (player.getGameMode() == GameMode.SPECTATOR) {
+                        // Spieler ist im Spectator-Modus, nichts machen
+                        player.sendMessage("§cDu kannst diesen Befehl im Spectator-Modus nicht ausführen.");
+                        return true; // Beendet den Befehl
+                    }
                     sender.sendMessage("§aDu hast einen Sound bei dir abgespielt!");
                     playbeep((Player) sender);
                     return true;
@@ -178,8 +184,6 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
 
                     return true;
                 }
-
-
                 else if (args[0].equalsIgnoreCase("add")) {
                     if (!sender.hasPermission("has.addtime")) {
                         sender.sendMessage("§cDu hast keine Berechtigung, um diesen Befehl auszuführen!");
@@ -211,12 +215,26 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                         // Variable 'time' aktualisieren
                         time += secondsToAdd;
                         Bukkit.broadcastMessage("§aEs wurden §e" + secondsToAdd + " Sekunden §azu hinzugefügt! Die Zeit beträgt jetzt: §e" + time + " Sekunden.");
+
+                        // Effekte für den Spieler verlängern
+                        if (selectedPlayer != null) {
+                            // Dauer der Effekte berechnen
+                            int newDuration = (time + secondsToAdd) * 20; // Minecraft erwartet die Dauer in Ticks (20 Ticks = 1 Sekunde)
+
+                            // Effekte neu anwenden oder verlängern
+                            selectedPlayer.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, newDuration, 0, true, false, true));
+                            selectedPlayer.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, newDuration, 1, true, false, true));
+                        } else {
+                            sender.sendMessage("§cKein Spieler ausgewählt, um die Effekte zu verlängern.");
+                        }
+
                     } catch (NumberFormatException e) {
                         sender.sendMessage("§cBitte gib eine gültige Zahl ein!");
                     }
 
                     return true;
                 }
+
                 else if (args[0].equalsIgnoreCase("stop")) {
                     if (!sender.hasPermission("has.stop")) {
                         sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
@@ -722,14 +740,17 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
         for (Player player : Bukkit.getOnlinePlayers()) {
             player.removePotionEffect(PotionEffectType.SLOW);
             player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+            player.removePotionEffect(PotionEffectType.SATURATION);
         }
     }
 
     public void giveEffects() {
         selectedPlayer.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, PotionEffect.INFINITE_DURATION, 1, true, false));
+        selectedPlayer.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, PotionEffect.INFINITE_DURATION, 0, true, false));
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (!player.equals(selectedPlayer)) {
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, PotionEffect.INFINITE_DURATION, 0, true, false));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, PotionEffect.INFINITE_DURATION, 0, true, false));
             }
         }
     }
