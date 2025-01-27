@@ -13,6 +13,8 @@ public final class HASPlugin extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
         plugin = this;
+        int pluginId = 24385;
+        Metrics metrics = new Metrics(this, pluginId);
         Bukkit.getWorld("world").setPVP(false);
         Bukkit.getConsoleSender().sendMessage("§6HASPlugin erfolgreich geladen!");
         getCommand("has").setExecutor(new HasCommand());
