@@ -219,11 +219,11 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                         // Effekte für den Spieler verlängern
                         if (selectedPlayer != null) {
                             // Dauer der Effekte berechnen
-                            int newDuration = (time + secondsToAdd) * 20; // Minecraft erwartet die Dauer in Ticks (20 Ticks = 1 Sekunde)
+                            int newDuration = (time) * 20; // Minecraft erwartet die Dauer in Ticks (20 Ticks = 1 Sekunde)
 
                             // Effekte neu anwenden oder verlängern
+                            selectedPlayer.removePotionEffect(PotionEffectType.BLINDNESS);
                             selectedPlayer.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, newDuration, 0, true, false, true));
-                            selectedPlayer.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, newDuration, 1, true, false, true));
                         } else {
                             sender.sendMessage("§cKein Spieler ausgewählt, um die Effekte zu verlängern.");
                         }
