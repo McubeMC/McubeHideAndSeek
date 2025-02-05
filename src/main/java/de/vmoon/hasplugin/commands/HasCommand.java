@@ -1,6 +1,7 @@
 package de.vmoon.hasplugin.commands;
 
 import de.vmoon.hasplugin.HASPlugin;
+import de.vmoon.hasplugin.manager.LanguageManager;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
@@ -45,9 +46,11 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
     private long countAlivePlayers = 0;
     // Globale Map, um die Spieler zu tracken, die gevotet haben
     private final Set<Player> playersVoted = new HashSet<>();
+    private LanguageManager languageManager;
 
-    public HasCommand() {
+    public HasCommand(LanguageManager languageManager) {
         this.teleportManager = new TeleportManager();
+        this.languageManager = languageManager;
         Bukkit.getPluginManager().registerEvents(this, HASPlugin.getPlugin());
         setupNoNameTagTeam();
     }
@@ -63,6 +66,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
             else if (args.length > 0) {
                 if (args[0].equalsIgnoreCase("reload")) {
                     if (!sender.hasPermission("has.reload")) {
+                        sender.sendMessage(languageManager.getMessage("no_permission"));
                         sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
                         return true;
                     }
@@ -119,10 +123,25 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                         sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
                         return true;
                     }
-                    sender.sendMessage("§c[HASPlugin] §rHASPlugin Version 2.8.3");
+                    sender.sendMessage("§c[HASPlugin] §rHASPlugin Version 2.8.6");
                     return true;
                 }
+                else if (args[0].equalsIgnoreCase("language")) {
+                    if (!sender.hasPermission("has.language")) {
+                        sender.sendMessage(languageManager.getMessage("no_permission"));
+                        return true;
+                    }
 
+                    if (args.length < 2) {
+                        sender.sendMessage("§cBitte gib eine Sprache an!");
+                        return true;
+                    }
+
+                    String newLanguage = args[1].toLowerCase();
+                    languageManager.setLanguage(newLanguage);
+                    sender.sendMessage(languageManager.getMessage("language_set").replace("%language%", newLanguage));
+                    return true;
+                }
 
                 else if (args[0].equalsIgnoreCase("vote")) {
                     if (!(sender instanceof Player)) {
@@ -402,6 +421,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
             if (sender.hasPermission("has.debug")) {
                 completions.add("debugtime");
             }
+            completions.add("language");
             return completions.stream()
                     .filter(s -> s.startsWith(args[0]))
                     .collect(Collectors.toList());

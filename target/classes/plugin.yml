@@ -1,5 +1,5 @@
 name: HASPlugin
-version: 2.8.5
+version: 2.8.6
 # '1.0-SNAPSHOT'
 main: de.vmoon.hasplugin.HASPlugin
 api-version: '1.20'
@@ -54,6 +54,9 @@ commands:
       has.debugtime:
         description: Gibt die abgelaufene Zeit in Sekunden an
         permission: has.debug
+      has.language:
+        description: Changes the plugin language
+        permission: has.language
   pvp:
     description: Aktiviert oder deaktiviert PVP.
     permission: pvp.use
@@ -132,6 +135,9 @@ permissions:
     description: Zeigt die abgelaufene Zeit in Sekunden an
     permission: has.debug
     default: false
+  has.language:
+    description: Changes the plugin language
+    permission: has.language
   pvp.use:
     description: Aktiviert oder Deaktiviert PVP.
     default: op

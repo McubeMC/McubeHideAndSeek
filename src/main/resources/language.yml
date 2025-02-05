@@ -1,0 +1,8 @@
+languages:
+  en:
+    teleport_success: "You have been teleported!"
+    teleport_all: "All players have been teleported!"
+    no_permission: "§cYou don't have the permission to use that command."
+  de:
+    teleport_success: "Du wurdest teleportiert!"
+    teleport_all: "Alle Spieler wurden teleportiert!"
