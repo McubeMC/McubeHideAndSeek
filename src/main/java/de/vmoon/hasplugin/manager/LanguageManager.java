@@ -33,8 +33,10 @@ public class LanguageManager {
     }
 
     public String getMessage(String key) {
-        return languageConfig.getString("messages." + key, "§c[Fehler] Nachricht nicht gefunden!");
+        String language = plugin.getConfig().getString("language", "de"); // Standard: Deutsch
+        return languageConfig.getString("languages." + language + "." + key, "§c[Error] message not found.");
     }
+
 
     public void setLanguage(String language) {
         FileConfiguration config = plugin.getConfig();

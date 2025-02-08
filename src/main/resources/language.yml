@@ -1,8 +1,67 @@
 languages:
   en:
-    teleport_success: "You have been teleported!"
-    teleport_all: "All players have been teleported!"
     no_permission: "§cYou don't have the permission to use that command."
   de:
-    teleport_success: "Du wurdest teleportiert!"
-    teleport_all: "Alle Spieler wurden teleportiert!"
+    # Generelle Nachrichten
+    no_permission: "§cDu hast keine Berechtigungen um diesen Befehl auszuführen!"
+    not_enough_players: "§cEs sind nicht genug Spieler online!"
+    config_reload: "§aConfig erfolgreich neu geladen!"
+    all_teleport: "§aAlle Spieler wurden zu den gespeicherten Koordinaten teleportiert."
+    only_players: "§cNur Spieler können diesen Befehl ausführen!"
+    selected_player_not_online: "§cDer ausgewählte Spieler ist nicht online!"
+
+    # Singular/Plural
+    message_second: " Sekunde"
+    message_seconds: " Sekunden"
+    message_minute: " Minute"
+    message_minutes: " Minuten"
+
+    # /has add
+    time_added_1: "§aEs wurden §e"
+    time_added_2: " Sekunden §azu hinzugefügt! Die Zeit beträgt jetzt: §e"
+    time_added_3: " Sekunden."
+    wrong_time: "§cBitte gib eine Zeit in Sekunden an. Beispiel: /has add 30"
+    no_game_running: "§cAktuell startet keine Runde. Es kann nur Zeit hinzugefügt werden, wenn ein Spiel startet."
+    right_number: "§cBitte gib eine gültige Zahl ein!"
+
+    # /has beep
+    spectator_error: "§cDu kannst diesen Befehl im Spectator-Modus nicht ausführen."
+    sound_played: "§aDu hast einen Sound bei dir abgespielt!"
+
+    # /has language
+    select_language: "§cBitte gib eine Sprache an!"
+    language_set: "§aDie Sprache wurde geändert!"
+
+    # /has select
+    new_random_player: "§aEin neuer zufälliger Spieler wurde ausgewählt!"
+    x_selected: " wurde als der suchende Spieler ausgewählt!"
+
+    # /has vote
+    already_hidden: "§cDu hast bereits gevotet!"
+    hide: "§aDu bist jetzt versteckt!"
+    not_all_hide: "§eNoch nicht alle Spieler sind versteckt!"
+
+    # Timer
+    timer_end: "§aDie Zeit ist abgelaufen. Der Sucher sucht jetzt"
+    timer_5: "§a§lDer Timer wurde auf 5 Sekunden gesetzt!"
+    timer_under_5: "§cDie Zeit ist bereits unter 5 Sekunden!"
+    no_timer: "§cEs läuft kein Timer."
+    timer_set_1: "§aDie Zeit wurde auf "
+    timer_set_2: " Sekunden gesetzt."
+
+    # Spiel Ende
+    game_end: "§aDas Spiel wurde beendet!"
+    game_normal_end: "§cAlle Spieler sind tot! Das Spiel endet."
+    end_seeker: "§cDer Sucher §f("
+    end_all_found: ")§c hat alle Spieler gefunden!"
+    # End-Title
+    title_all_found: "§2Alle Gefunden!"
+    title_seeker: "§cSucher: §r"
+    timer_text: "Timer: "
+
+    # Benutzungs Tipps
+    select_usage: "§6Verwendung: /has select <Spieler | random>"
+
+    no_player_effect: "§cKein Spieler ausgewählt, um die Effekte zu verlängern."
+    message_only: "§aNoch "
+    message_left: " übrig!"

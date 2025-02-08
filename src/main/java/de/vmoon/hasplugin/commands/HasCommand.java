@@ -60,22 +60,21 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
         selectRandomPlayer();
         if (cmd.getName().equalsIgnoreCase("has")) {
             if (!sender.hasPermission("has.run")) {
-                sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
+                sender.sendMessage(languageManager.getMessage("no_permission"));
                 return true;
             }
             else if (args.length > 0) {
                 if (args[0].equalsIgnoreCase("reload")) {
                     if (!sender.hasPermission("has.reload")) {
                         sender.sendMessage(languageManager.getMessage("no_permission"));
-                        sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
                         return true;
                     }
-                    sender.sendMessage("§6Config erfolgreich neu geladen!");
+                    sender.sendMessage(languageManager.getMessage("config_reload"));
                     reload();
                 }
                 else if (args[0].equalsIgnoreCase("help")) {
                     if (!sender.hasPermission("has.help")) {
-                        sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
+                        sender.sendMessage(languageManager.getMessage("no_permission"));
                         return true;
                     }
                     sender.sendMessage("Bitte benutze /hashelp!");
@@ -83,47 +82,47 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                 }
                 else if (args[0].equalsIgnoreCase("beep")) {
                     if (!sender.hasPermission("has.beep")) {
-                        sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
+                        sender.sendMessage(languageManager.getMessage("no_permission"));
                         return true;
                     }
                     Player player = (Player) sender;
                     if (player.getGameMode() == GameMode.SPECTATOR) {
                         // Spieler ist im Spectator-Modus, nichts machen
-                        player.sendMessage("§cDu kannst diesen Befehl im Spectator-Modus nicht ausführen.");
+                        sender.sendMessage(languageManager.getMessage("spectator_error"));
                         return true; // Beendet den Befehl
                     }
-                    sender.sendMessage("§aDu hast einen Sound bei dir abgespielt!");
+                    sender.sendMessage(languageManager.getMessage("sound_played"));
                     playbeep((Player) sender);
                     return true;
                 }
                 else if (args[0].equalsIgnoreCase("teleportall")) {
                     if (!sender.hasPermission("has.teleportall")) {
-                        sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
+                        sender.sendMessage(languageManager.getMessage("no_permission"));
                         return true;
                     }
                     teleportAllPlayers();
-                    sender.sendMessage("Alle Spieler wurden zu den gespeicherten Koordinaten teleportiert.");
+                    sender.sendMessage(languageManager.getMessage("all_teleport"));
                     return true;
                 }
                 else if (args[0].equalsIgnoreCase("endgame")) {
                     if (!sender.hasPermission("has.endgame")) {
-                        sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
+                        sender.sendMessage(languageManager.getMessage("no_permission"));
                         return true;
                     }
                     if (!moreThanOnePlayerOnline()) {
-                        sender.sendMessage("Es sind nicht genug Spieler online!");
+                        sender.sendMessage(languageManager.getMessage("not_enough_players"));
                         return true;
                     }
                     endgame();
-                    sender.sendMessage("Das Spiel wurde beendet!");
+                    sender.sendMessage(languageManager.getMessage("game_end"));
                     return true;
                 }
                 else if (args[0].equalsIgnoreCase("version")) {
                     if (!sender.hasPermission("has.version")) {
-                        sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
+                        sender.sendMessage(languageManager.getMessage("no_permission"));
                         return true;
                     }
-                    sender.sendMessage("§c[HASPlugin] §rHASPlugin Version 2.8.6");
+                    sender.sendMessage("§c[HASPlugin] §rHASPlugin Version 2.8.7");
                     return true;
                 }
                 else if (args[0].equalsIgnoreCase("language")) {
@@ -133,7 +132,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                     }
 
                     if (args.length < 2) {
-                        sender.sendMessage("§cBitte gib eine Sprache an!");
+                        sender.sendMessage(languageManager.getMessage("select_language"));
                         return true;
                     }
 
@@ -145,36 +144,36 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
 
                 else if (args[0].equalsIgnoreCase("vote")) {
                     if (!(sender instanceof Player)) {
-                        sender.sendMessage("§cNur Spieler können diesen Befehl ausführen!");
+                        sender.sendMessage(languageManager.getMessage("only_players"));
                         return true;
                     }
 
                     Player player = (Player) sender;
 
                     if (!player.hasPermission("has.vote")) {
-                        player.sendMessage("§cDu hast keine Berechtigung, um diesen Befehl auszuführen!");
+                        sender.sendMessage(languageManager.getMessage("no_permission"));
                         return true;
                     }
 
                     if (!moreThanOnePlayerOnline()) {
-                        player.sendMessage("§cEs sind nicht genug Spieler online!");
+                        sender.sendMessage(languageManager.getMessage("not_enought_players"));
                         return true;
                     }
 
                     // Überprüfe, ob der ausgewählte Spieler existiert
                     if (selectedPlayer == null || !Bukkit.getOnlinePlayers().contains(selectedPlayer)) {
-                        player.sendMessage("§cDer ausgewählte Spieler ist nicht online!");
+                        sender.sendMessage(languageManager.getMessage("selected_player_not_online"));
                         return true;
                     }
 
                     // Spieler hinzufügen, wenn sie gevotet haben
                     if (playersVoted.contains(player)) {
-                        player.sendMessage("§cDu hast bereits gevotet!");
+                        sender.sendMessage(languageManager.getMessage("already_hidden"));
                         return true;
                     }
 
                     playersVoted.add(player);
-                    player.sendMessage("§aDanke für deinen Vote!");
+                    sender.sendMessage(languageManager.getMessage("hide"));
 
                     // Überprüfen, ob alle Spieler (außer selectedPlayer) gevotet haben
                     Set<Player> requiredPlayers = Bukkit.getOnlinePlayers().stream()
@@ -186,32 +185,32 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                         if (timerRunning) {
                             if (time > 5) {
                                 time = 5;
-                                Bukkit.broadcastMessage("§a§lDer Timer wurde auf 5 Sekunden gesetzt!");
+                                Bukkit.broadcastMessage(languageManager.getMessage("timer_5"));
                             } else if (time < 5) {
-                                player.sendMessage("§cDie Zeit ist bereits unter 5 Sekunden!");
+                                player.sendMessage(languageManager.getMessage("timer_under_5"));
                             }
                         } else {
-                            player.sendMessage("§cEs läuft kein Timer. Bitte starte erst einen, um ihn zu skippen!");
+                            player.sendMessage(languageManager.getMessage("no_timer"));
                         }
 
                         // Liste zurücksetzen, da die Aktion abgeschlossen ist
                         playersVoted.clear();
                     } else {
                         // Noch nicht alle haben gevotet
-                        Bukkit.broadcastMessage("§eNoch nicht alle Spieler haben gevotet!");
+                        Bukkit.broadcastMessage(languageManager.getMessage("not_all_hide"));
                     }
 
                     return true;
                 }
                 else if (args[0].equalsIgnoreCase("add")) {
                     if (!sender.hasPermission("has.addtime")) {
-                        sender.sendMessage("§cDu hast keine Berechtigung, um diesen Befehl auszuführen!");
+                        sender.sendMessage(languageManager.getMessage("no_permission"));
                         return true;
                     }
 
                     // Überprüfen, ob eine Zeit angegeben wurde
                     if (args.length < 2) {
-                        sender.sendMessage("§cBitte gib eine Zeit in Sekunden an. Beispiel: /has add 30");
+                        sender.sendMessage(languageManager.getMessage("wrong_time"));
                         return true;
                     }
 
@@ -221,19 +220,19 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
 
                         // Negative Zeit verhindern
                         if (secondsToAdd <= 0) {
-                            sender.sendMessage("§cBitte gib eine positive Zahl ein!");
+                            sender.sendMessage(languageManager.getMessage("right_number"));
                             return true;
                         }
 
                         // Prüfen, ob der Timer läuft
                         if (!timerRunning) {
-                            sender.sendMessage("§cAktuell startet keine Runde. Es kann nur Zeit hinzugefügt werden, wenn ein Spiel startet.");
+                            sender.sendMessage(languageManager.getMessage("no_game_running"));
                             return true;
                         }
 
                         // Variable 'time' aktualisieren
                         time += secondsToAdd;
-                        Bukkit.broadcastMessage("§aEs wurden §e" + secondsToAdd + " Sekunden §azu hinzugefügt! Die Zeit beträgt jetzt: §e" + time + " Sekunden.");
+                        Bukkit.broadcastMessage(languageManager.getMessage("time_added_1") + secondsToAdd + languageManager.getMessage("time_added_2") + time + languageManager.getMessage("time_added_3"));
 
                         // Effekte für den Spieler verlängern
                         if (selectedPlayer != null) {
@@ -244,11 +243,11 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                             selectedPlayer.removePotionEffect(PotionEffectType.BLINDNESS);
                             selectedPlayer.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, newDuration, 0, true, false, true));
                         } else {
-                            sender.sendMessage("§cKein Spieler ausgewählt, um die Effekte zu verlängern.");
+                            sender.sendMessage(languageManager.getMessage("no_player_effect"));
                         }
 
                     } catch (NumberFormatException e) {
-                        sender.sendMessage("§cBitte gib eine gültige Zahl ein!");
+                        sender.sendMessage(languageManager.getMessage("right_number"));
                     }
 
                     return true;
@@ -256,7 +255,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
 
                 else if (args[0].equalsIgnoreCase("stop")) {
                     if (!sender.hasPermission("has.stop")) {
-                        sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
+                        sender.sendMessage(languageManager.getMessage("no_permission"));
                         return true;
                     }
                     cancelgame();
@@ -264,64 +263,64 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                         stopTimer();
                     }
                     else {
-                        sender.sendMessage("Es läuft kein Timer.");
+                        sender.sendMessage(languageManager.getMessage("no_timer"));
                     }
                     return true;
                 }
                 else if (args[0].equalsIgnoreCase("select")) {
                     if (!sender.hasPermission("has.select")) {
-                        sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
+                        sender.sendMessage(languageManager.getMessage("no_permission"));
                         return true;
                     }
                     if (!moreThanOnePlayerOnline()) {
-                        sender.sendMessage("Es sind nicht genug Spieler online!");
+                        sender.sendMessage(languageManager.getMessage("not_enough_players"));
                         return true;
                     }
                     if (args.length == 2) {
                         if (!sender.hasPermission("has.select.random")) {
-                            sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
+                            sender.sendMessage(languageManager.getMessage("no_permission"));
                             return true;
                         }
                         if (args[1].equalsIgnoreCase("random")) {
                             selectedPlayer = selectRandomPlayer();
-                            sender.sendMessage("Ein neuer zufälliger Spieler wurde ausgewählt!");
+                            sender.sendMessage(languageManager.getMessage("new_random_player"));
                         }
                         else {
                             Player newSelectedPlayer = Bukkit.getPlayer(args[1]);
                             if (newSelectedPlayer != null && newSelectedPlayer.isOnline()) {
                                 selectedPlayer = newSelectedPlayer;
-                                sender.sendMessage(selectedPlayer.getName() + " wurde als der suchende Spieler ausgewählt!");
+                                sender.sendMessage(selectedPlayer.getName() + languageManager.getMessage("x_selected"));
                             }
                             else {
-                                sender.sendMessage("Der angegebene Spieler ist nicht online.");
+                                sender.sendMessage(languageManager.getMessage("selected_player_not_online"));
                             }
                         }
                     }
                     else {
-                        sender.sendMessage("Verwendung: /has select <Spieler | random>");
+                        sender.sendMessage(languageManager.getMessage("select_usage"));
                     }
                     return true;
                 }
                 else if (args[0].equalsIgnoreCase("skip")) {
                     if (!sender.hasPermission("has.skip")) {
-                        sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
+                        sender.sendMessage(languageManager.getMessage("no_permission"));
                         return true;
                     }
                     if (!moreThanOnePlayerOnline()) {
-                        sender.sendMessage("Es sind nicht genug Spieler online!");
+                        sender.sendMessage(languageManager.getMessage("not_enough_players"));
                         return true;
                     }
                     if (timerRunning) {
                         if (time > 5) {
                             time = 5;
-                            Bukkit.broadcastMessage("§a§lDer Timer wurde auf 5 Sekunden gesetzt!");
+                            Bukkit.broadcastMessage(languageManager.getMessage("timer_5"));
                         }
                         else if (time <5) {
-                            sender.sendMessage("Die Zeit ist bereits unter 5 Sekunden!");
+                            sender.sendMessage(languageManager.getMessage("timer_under_5"));
                         }
                     }
                     else {
-                        sender.sendMessage("Es läuft kein Timer. Bitte starte erst einen, um ihn zu skippen!");
+                        sender.sendMessage(languageManager.getMessage("no_timer"));
                     }
                     return true;
                 }
@@ -330,7 +329,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
 
                 else if (args[0].equalsIgnoreCase("debugtime")) {
                     if (!sender.hasPermission("has.debug")) {
-                        sender.sendMessage("§cDu hast keine Berechtigung um diesen Befehl auszuführen!");
+                        sender.sendMessage(languageManager.getMessage("no_permission"));
                         return true;
                     }
                     String globalTimerString = "Abgelaufene Zeit: " + globalTimer;
@@ -345,25 +344,25 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                 }
                 else {
                     if (!moreThanOnePlayerOnline()) {
-                        sender.sendMessage("Es sind nicht genug Spieler online!");
+                        sender.sendMessage(languageManager.getMessage("not_enough_players"));
                         return true;
                     }
                     try {
                         time = Integer.parseInt(args[0]);
-                        Bukkit.broadcastMessage("Die Zeit wurde auf " + time + " Sekunden gesetzt.");
+                        Bukkit.broadcastMessage(languageManager.getMessage("timer_set_1") + time + languageManager.getMessage("timer_set_2"));
                         if (selectedPlayer == null || !selectedPlayer.isOnline()) {
                             selectedPlayer = selectRandomPlayer();
                         }
                         startgame();
                     }
                     catch (NumberFormatException e) {
-                        sender.sendMessage("Bitte gib eine gültige Zahl ein.");
+                        sender.sendMessage(languageManager.getMessage("right_number"));
                     }
                 }
             }
             else {
                 if (!moreThanOnePlayerOnline()) {
-                    sender.sendMessage("Es sind nicht genug Spieler online!");
+                    sender.sendMessage(languageManager.getMessage("not_enough_players"));
                     return true;
                 }
                 time = defaultTime;
@@ -509,7 +508,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                     case 3:
                     case 2:
                     case 1:
-                        Bukkit.broadcastMessage("§aNoch " + time + (time == 1 ? " Sekunde" : " Sekunden") + " übrig!");
+                        Bukkit.broadcastMessage(languageManager.getMessage("message_only") + time + (time == 1 ? languageManager.getMessage("message_second") : languageManager.getMessage("message_seconds")) + languageManager.getMessage("message_left"));
                         break;
                     case 0:
                         enablepvp();
@@ -521,7 +520,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                     player.setLevel(time);
                 }
                 if (time == 0) {
-                    Bukkit.broadcastMessage("§aDie Zeit ist abgelaufen. Der Sucher sucht jetzt");
+                    Bukkit.broadcastMessage(languageManager.getMessage("timer_end"));
                     time = defaultTime;
                     giveItems(selectedPlayer);
                     removeBlindnessEffect();
@@ -550,7 +549,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
     }
 
     private void gameEnd() {
-        Bukkit.broadcastMessage("§cAlle Spieler sind tot! Das Spiel endet.");
+        Bukkit.broadcastMessage(languageManager.getMessage("game_normal_end"));
     }
 
     private void stopTimer() {
@@ -642,10 +641,10 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
     }
 
     private void endgame() {
-        Bukkit.broadcastMessage("§cDer Sucher §f(" + selectedPlayer.getName() + ")§c hat alle Spieler gefunden!");
+        Bukkit.broadcastMessage(languageManager.getMessage("end_seeker") + selectedPlayer.getName() + languageManager.getMessage("end_all_found"));
         disablepvp();
         for (Player player : Bukkit.getOnlinePlayers()) {
-            player.sendTitle("§2Alle Gefunden!", "§cSucher: §r" + selectedPlayer.getName(), 10, 70, 20);
+            player.sendTitle(languageManager.getMessage("title_all_found"), (languageManager.getMessage("title_seeker")) + selectedPlayer.getName(), 10, 70, 20);
             removeEffects();
             stopGlobalTimer();
         }
@@ -741,10 +740,10 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
     public void updateGlobalActionBar() {
         int minutes = globalTimer / 60;
         int remainingSeconds = globalTimer % 60;
-        String minuteString = minutes > 1 ? " Minuten" : " Minute";
-        String secondString = remainingSeconds > 1 ? " Sekunden" : " Sekunde";
+        String minuteString = minutes > 1 ? languageManager.getMessage("message_minutes") : languageManager.getMessage("message_minute");
+        String secondString = remainingSeconds > 1 ? languageManager.getMessage("message_seconds") : languageManager.getMessage("message_second");
 
-        String timeMessage = ChatColor.GREEN + "Timer: " + ChatColor.WHITE;
+        String timeMessage = ChatColor.GREEN + languageManager.getMessage("timer_text") + ChatColor.WHITE;
 
         if (minutes > 0) {
             timeMessage += minutes + minuteString + " ";
