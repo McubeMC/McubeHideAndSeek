@@ -1,6 +1,70 @@
+#Language-file Version: 2.8.8
 languages:
   en:
     no_permission: "§cYou don't have the permission to use that command."
+    not_enough_players: "§cThere are not enough players online!"
+    config_reload: "§aConfig successfully reloaded!"
+    all_teleport: "§aAll players have been teleported to the saved coordinates."
+    only_players: "§cOnly players can execute this command!"
+    selected_player_not_online: "§cThe selected player is not online!"
+
+    # Singular/Plural
+    message_second: " second"
+    message_seconds: " seconds"
+    message_minute: " minute"
+    message_minutes: " minutes"
+
+    # /has add
+    time_added_1: "§aAdded §e"
+    time_added_2: " seconds §ato the time! The total time is now: §e"
+    time_added_3: " seconds."
+    wrong_time: "§cPlease enter a time in seconds. Example: /has add 30"
+    no_game_running: "§cNo game is currently running. Time can only be added when a game is starting."
+    right_number: "§cPlease enter a valid number!"
+
+    # /has beep
+    spectator_error: "§cYou cannot execute this command in spectator mode."
+    sound_played: "§aYou played a sound for yourself!"
+
+    # /has language
+    select_language: "§cPlease specify a language!"
+    language_set: "§aThe language has been changed!"
+
+    # /has select
+    new_random_player: "§aA new random player has been selected!"
+    x_selected: " has been chosen as the seeking player!"
+
+    # /has vote
+    already_hidden: "§cYou have already voted!"
+    hide: "§aYou are now hidden!"
+    not_all_hide: "§eNot all players are hidden yet!"
+
+    # Timer
+    timer_end: "§aTime is up. The seeker is now searching."
+    timer_5: "§a§lThe timer has been set to 5 seconds!"
+    timer_under_5: "§cThe time is already below 5 seconds!"
+    no_timer: "§cThere is no active timer."
+    timer_set_1: "§aThe time has been set to "
+    timer_set_2: " seconds."
+
+    # Game End
+    game_end: "§aThe game has ended!"
+    game_normal_end: "§cAll players are dead! The game ends."
+    end_seeker: "§cThe seeker §f("
+    end_all_found: ")§c has found all players!"
+
+    # End-Title
+    title_all_found: "§2All Found!"
+    title_seeker: "§cSeeker: §r"
+    timer_text: "Timer: "
+
+    # Usage Tips
+    select_usage: "§6Usage: /has select <player | random>"
+
+    no_player_effect: "§cNo player selected to extend effects."
+    message_only: "§aOnly "
+    message_left: " left!"
+
   de:
     # Generelle Nachrichten
     no_permission: "§cDu hast keine Berechtigungen um diesen Befehl auszuführen!"
@@ -54,6 +118,7 @@ languages:
     game_normal_end: "§cAlle Spieler sind tot! Das Spiel endet."
     end_seeker: "§cDer Sucher §f("
     end_all_found: ")§c hat alle Spieler gefunden!"
+
     # End-Title
     title_all_found: "§2Alle Gefunden!"
     title_seeker: "§cSucher: §r"

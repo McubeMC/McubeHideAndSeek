@@ -122,7 +122,7 @@ public class HasCommand implements CommandExecutor, TabCompleter, Listener {
                         sender.sendMessage(languageManager.getMessage("no_permission"));
                         return true;
                     }
-                    sender.sendMessage("§c[HASPlugin] §rHASPlugin Version 2.8.7");
+                    sender.sendMessage("§c[HASPlugin] §rHASPlugin Version 2.8.8");
                     return true;
                 }
                 else if (args[0].equalsIgnoreCase("language")) {
