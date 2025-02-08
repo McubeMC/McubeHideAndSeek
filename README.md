@@ -1,6 +1,6 @@
 # HASPlugin
 This is a German Hide and Seek plugin.\
-A translation will be available in the future.\
+But you can change the language with /has language\
 Questions and problems can be posted on Github.\
 Now available for more than 2 players!\
 Tested on version 1.21.3
@@ -10,6 +10,8 @@ Tested on version 1.21.3
 - cancel the game
 - set the hiding time
 - set the spawn coordinates
+- change the language of the messages
+- no nametags for players
 
 ## Download
 - [Modrinth](https://modrinth.com/plugin/hasplugin)
