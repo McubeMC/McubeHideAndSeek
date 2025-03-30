@@ -1,19 +1,12 @@
-# HASPlugin
-This is a German Hide and Seek plugin.\
-But you can change the language with /has language\
-Questions and problems can be posted on Github.\
-Now available for more than 2 players!\
-Tested on version 1.21.3
+# Mcube Plugin for : MB : Hide And Seek (Cache Cache)
+(I'm remaking it , because I lost the first version)
+Based on HasPlugin\
+McubeHideAndSeek is a modified and translated HASplugin by VoidableMoon884.
 
-## Features
-- select the seeker
-- cancel the game
-- set the hiding time
-- set the spawn coordinates
-- change the language of the messages
-- no nametags for players
+## Features:
+- Base commands : Select seeker , start/stop the game , set the timer and more;
+- Translated in French
+  
 
-## Download
-- [Modrinth](https://modrinth.com/plugin/hasplugin)
+Original GitHub (HasPlugin)
 - [GitHub](https://github.com/VoidableMoon884/HASPlugin/releases)
-- [Spigot](https://www.spigotmc.org/resources/hasplugin.122812/)
