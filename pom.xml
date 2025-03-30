@@ -4,19 +4,19 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>de.vmoon</groupId>
-    <artifactId>HASPlugin</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <groupId>fr.antyle</groupId>
+    <artifactId>HideAndSeekMCube</artifactId>
+    <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>HASPlugin</name>
+    <name>HideAndSeekMCube</name>
 
-    <description>A Hide and Seek Plugin by VoidableMoon884</description>
+    <description>A Modified Hide and Seek Plugin by VoidableMoon884 , for Mcube</description>
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    <url>https://vmoon.de/</url>
+    <url>https://mcubemc.fr</url>
 
     <build>
         <plugins>
