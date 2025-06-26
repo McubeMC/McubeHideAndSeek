@@ -1,166 +1,166 @@
-name: HASPlugin
-version: 2.8.8
+name: McubeHAS
+version: 1.2.8.8
 main: de.vmoon.hasplugin.HASPlugin
-api-version: '1.20'
+api-version: '1.21'
 authors: [VoidableMoon]
-description: A Hide and Seek Plugin by VoidableMoon884
-website: https://hasplugin.vmoon.de/
+description: A modified Hide and Seek Plugin by VoidableMoon884 and McubeMC
+website: https://mcubemc.fr
 commands:
   has:
-    description: The main Hide-and-Seek Command
+    description: Commande principal.
     permission: has.run
     children:
       has.stop:
-        description: Bricht den laufenden Timer ab.
+        description: Arrête le timer.
         permission: has.stop
       has.version:
-        description: Zeigt die Version des Plugins an.
+        description: Version du plugin.
         permission: has.version
       has.skip:
-        description: Skipt den laufenden Timer
+        description: Skip le timer.
         permission: has.skip
       has.select:
-        description: Wählt einen Spieler als Sucher aus.
+        description: Selectionne le chercheur.
         permission: has.select
         children:
           has.select.random:
-            description: Wählt einen zufälligen Spieler aus.
+            description: Selectionne de manière aléatoire le chercheur.
             permission: has.select.random
       has.teleportall:
-        description: Teleportiert alle Spieler zu den Koordinaten in der Config.
+        description: Téléporte tous les joueurs aux coordonnnés
         permission: has.teleportall
       has.reload:
-        description: Lädt die Config Datei neu.
+        description: Reload la config.
         permission: has.reload
       has.help:
-        description: Hilfe für den Befehl
+        description: Commande d'aide.
         permission: has.help
       has.beep:
-        description: Spielt einen Sound beim ausführenden Spieler aus
+        description: Joue un son.
         permission: has.beep
       has.endgame:
-        description: Beendet das laufende Spiel mit der End Animation
-        permission: has.
+        description: Arrête la partie.
+        permission: has.endgame
       has.vote:
-        description: Voten zum verkürzen des wartens
+        description: Vote de la partie (chercheur)
         permission: has.vote
       has.addtime:
-        description: Zeit zum verstecken hinzufügen
+        description: Ajoute du temps
         permission: has.addtime
       has.autor:
-        description: Autor Befehl
+        description: Auteur.s du plugin.
         permission: has.autor
       has.debugtime:
-        description: Gibt die abgelaufene Zeit in Sekunden an
+        description: Active les commandes de debugs.
         permission: has.debug
       has.language:
-        description: Changes the plugin language
+        description: Change la langue du plugin [NOT DISPONIBLE POUR MCUBE]
         permission: has.language
   pvp:
-    description: Aktiviert oder deaktiviert PVP.
+    description: Active ou désactive la possibilité de PVP
     permission: pvp.use
     children:
       pvp.on:
-        description: Aktiviert PVP.
+        description: Active le PVP
         permission: pvp.on
       pvp.off:
-        description: Deaktiviert PVP.
+        description: Désactive le PVP
         permission: pvp.off
   hashelp:
-    description: Hilfe für die befehle
+    description: Commande d'help
     permission: hashelp.use
     children:
       hashelp.reload:
-        description: Hilfe für /has reload
+        description: Help sur le /reload
         permission: hashelp.reload
       hashelp.select:
-        description: Hilfe für /has select
+        description: Help sur le /has select
         permission: hashelp.select
       hashelp.stop:
-        description: Hilfe für /has stop
+        description: Help sur le /has stop
         permission: hashelp.stop
       hashelp.teleportall:
-        description: Hilfe für /has teleportall
+        description: Help sur le /has teleportall
         permission: hashelp.teleportall
       hashelp.help:
-        description: Zeigt diese Hilfe.
+        description: help sur l'help ?
         permission: hashelp.help
 permissions:
   has.run:
-    description: The main Hide-and-Seek Command
+    description: Commande de base.
     default: true
   has.stop:
-    description: Bricht den laufenden Timer ab.
+    description: Arrête le timer.
     default: op
   has.select:
-    description: Wählt einen Spieler als Sucher aus.
+    description: Selectionne un chercheur.
     default: op
   has.select.random:
-    description: Wählt einen zufälligen Spieler aus.
+    description: Selectionne un chercheur de manière aléatoire.
     default: op
   has.version:
-    description: Zeigt die Version des Plugins an.
+    description: Affiche la version du plugin.
     default: true
   has.teleportall:
-    description: Teleportiert alle Spieler zu den Koordinaten in der Config.
+    description: Téléporte tout le monde
     default: op
   has.reload:
-    description: Lädt die Config Datei neu.
+    description: Reload.
     default: op
   has.help:
-    description: Befehl für Hilfe
+    description: Commande d'aide.
     default: op
   has.skip:
-    description: Skippt den laufenden Timer
+    description: Skip le timer.
     default: op
   has.beep:
-    description: Spielt einen Sound beim ausführenden Spieler aus
+    description: Joue un son.
     default: op
   has.endgame:
-    description: Beendet das laufende Spiel mit einer Animation.
+    description: Arrête la partie
     default: op
   has.vote:
-    description: Voten zum verkürzen des wartens
+    description: Vote pour la partie(chercheur)
     permission: has.vote
   has.autor:
-    description: Autor Befehl
+    description: Auteur.s du plugin
     permission: has.autor
     default: false
   has.addtime:
-    description: Zeit zum verstecken hinzufügen
+    description: Ajoute du temps.
     permission: has.addtime
     default: op
   has.debug:
-    description: Zeigt die abgelaufene Zeit in Sekunden an
+    description: Commande de debug
     permission: has.debug
     default: false
   has.language:
-    description: Changes the plugin language
+    description: Change la langue du plugin [NOT DISPONIBLE POUR MCUBE]
     permission: has.language
   pvp.use:
-    description: Aktiviert oder Deaktiviert PVP.
+    description: Active ou désactive le PVP
     default: op
   pvp.on:
-    description: Aktiviert PVP.
+    description: Active le PVP
     default: op
   pvp.off:
-    description: Deaktiviert PVP.
+    description: Désactive le PVP
     default: op
   hashelp.use:
-    description: Hilfe für /has
+    description: Help sur le /has
     default: op
   hashelp.reload:
-    description: Hilfe für /has reload
+    description: Help sur le /has reload
     default: op
   hashelp.select:
-    description: Hilfe für /has select
+    description: Help sur le /has select
     default: op
   hashelp.stop:
-    description: Hilfe für /has stop
+    description: Help sur le /has stop
     default: op
   hashelp.teleportall:
-    description: Hilfe für /has teleportall
+    description: Help sur le /has teleportall
     default: op
   hashelp.help:
-    description: Zeigt dieses Hilfe.
+    description: Help sur le Hilfe.
     default: op

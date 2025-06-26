@@ -9,8 +9,8 @@ languages:
     selected_player_not_online: "§cThe selected player is not online!"
 
     # Singular/Plural
-    message_second: " second"
-    message_seconds: " seconds"
+    message_second: " seconde"
+    message_seconds: " secondes"
     message_minute: " minute"
     message_minutes: " minutes"
 

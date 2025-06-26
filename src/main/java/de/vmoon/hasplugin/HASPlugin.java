@@ -12,13 +12,10 @@ public final class HASPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        // Plugin startup logic
         plugin = this;
-        int pluginId = 24385;
-        Metrics metrics = new Metrics(this, pluginId);
         LanguageManager languageManager = new LanguageManager(this);
         Bukkit.getWorld("world").setPVP(false);
-        Bukkit.getConsoleSender().sendMessage("§6HASPlugin erfolgreich geladen!");
+        Bukkit.getConsoleSender().sendMessage("&a&l[MCUBEMC] &eHS is now successfully enabled!");
         getCommand("has").setExecutor(new HasCommand(languageManager));
         getCommand("pvp").setExecutor(new pvpCommand());
         getCommand("hashelp").setExecutor(new helpCommand());
@@ -27,8 +24,7 @@ public final class HASPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        Bukkit.getConsoleSender().sendMessage("§6HASPlugin erfolgreich deaktiviert!");
-        // Plugin shutdown logic
+        Bukkit.getConsoleSender().sendMessage("&c&l[MCUBEMC] &eHS is now successfully disabled.");
     }
     public static HASPlugin getPlugin() {
         return plugin;

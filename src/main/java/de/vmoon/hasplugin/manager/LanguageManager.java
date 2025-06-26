@@ -21,7 +21,7 @@ public class LanguageManager {
     private void saveDefaultLanguageFile() {
         languageFile = new File(plugin.getDataFolder(), "language.yml");
         if (!languageFile.exists()) {
-            plugin.saveResource("language.yml", false);  // <-- Jetzt funktioniert `saveResource`
+            plugin.saveResource("language.yml", false);
         }
     }
 
@@ -33,7 +33,7 @@ public class LanguageManager {
     }
 
     public String getMessage(String key) {
-        String language = plugin.getConfig().getString("language", "de"); // Standard: Deutsch
+        String language = plugin.getConfig().getString("language", "de");
         return languageConfig.getString("languages." + language + "." + key, "§c[Error] message not found.");
     }
 
